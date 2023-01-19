@@ -3,6 +3,12 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form action="{{ url_for('keyword_search') }}" method="post" class="add-entry" id="keyword_Search">
+        <div class="container w-75">
+            <div class="input-group rounded">
+              <input type="text" name="keyword_Search" class="form-control rounded" placeholder="Type in a keyword" aria-label="Search" aria-describedby="search-addon" />
+              <button class="btn btn-outline-dark" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
 </div>

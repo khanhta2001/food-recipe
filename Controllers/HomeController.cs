@@ -23,6 +23,31 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult LoginPage()
+    {
+        return View();
+    }
+
+    public IActionResult RegisterPage()
+    {
+        return View();
+    }
+
+    public IActionResult Categories()
+    {
+        return View();
+    }
+
+    public IActionResult Login(string username, string email, string password, string retypePassword)
+    {
+        return HomePage();
+    }
+
+    public IActionResult Register(string username, string email, string password, string retypePassword)
+    {
+        return LoginPage();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
