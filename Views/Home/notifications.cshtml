@@ -6,7 +6,6 @@
         <a href="{{ url_for('view_recipe', recipe_id = notification.recipe_id) }}">post</a>
         <a> on {{ notification.action_date }} at {{ notification.action_time }}</a>
     </div>
-
     {% else %}
     <div>
         Nothing in here so far
