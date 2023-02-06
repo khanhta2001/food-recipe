@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp.Controllers;
     
@@ -15,6 +16,8 @@ public class HomeController : Controller
 
     public IActionResult HomePage()
     {
+        HttpContext.Session.SetString("username", "Khanh");
+        //HttpContext.Session.SetString("SessionKeyName", "The Doctor");
         return View();
     }
 
@@ -43,11 +46,11 @@ public class HomeController : Controller
         return HomePage();
     }
     
-    public IActionResult VerificationPage(string username, string email, string password, string retypePassword)
+    public IActionResult Logout()
     {
         return HomePage();
     }
-    
+
     public IActionResult ResetPasswordPage()
     {
         return HomePage();
@@ -56,6 +59,11 @@ public class HomeController : Controller
     public IActionResult ResetPassword()
     {
         return HomePage();
+    }
+    
+    public IActionResult VerificationPage(string username, string email, string password, string retypePassword)
+    {
+        return View();
     }
     
     public IActionResult Verification(string username, string email, string password, string retypePassword)
@@ -68,24 +76,29 @@ public class HomeController : Controller
         return View();
     }
     
-    public IActionResult Categories_recipePage()
+    public IActionResult Categories_recipes()
     {
         return View();
     }
     
-    public IActionResult NotificationPage()
+    public IActionResult NotificationsPage()
     {
         return View();
     }
     
     public IActionResult Notification()
     {
+        return HomePage();
+    }
+    
+    public IActionResult save_recipesPage()
+    {
         return View();
     }
     
-    public IActionResult save_recipe()
+    public IActionResult save_recipes()
     {
-        return View();
+        return HomePage();
     }
     
     public IActionResult ReviewPage()
@@ -98,11 +111,6 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult review_recipePage()
-    {
-        return View();
-    }
-
     public IActionResult ReviewEditPage()
     {
         return View();
@@ -110,17 +118,17 @@ public class HomeController : Controller
     
     public IActionResult ReviewEdit()
     {
-        return View();
+        return HomePage();
     }
 
-    public IActionResult SearchPage()
+    public IActionResult SearchResults()
     {
         return View();
     }
     
     public IActionResult Search()
     {
-        return View();
+        return HomePage();
     }
     
     public IActionResult UpdateProfilePage()
@@ -130,12 +138,12 @@ public class HomeController : Controller
     
     public IActionResult UpdateProfile()
     {
-        return View();
+        return HomePage();
     }
     
     public IActionResult CreateRecipePage()
     {
-        return HomePage();
+        return View();
     }
     
     public IActionResult CreateRecipe()
@@ -145,7 +153,7 @@ public class HomeController : Controller
     
     public IActionResult EditRecipePage()
     {
-        return HomePage();
+        return View();
     }
     
     public IActionResult EditRecipe()
@@ -153,9 +161,9 @@ public class HomeController : Controller
         return HomePage();
     }
     
-    public IActionResult ViewRecipe()
+    public IActionResult ViewRecipePage()
     {
-        return HomePage();
+        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
