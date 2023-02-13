@@ -148,6 +148,7 @@ public class HomeController : Controller
     
     public IActionResult CreateRecipe()
     {
+        
         return HomePage();
     }
     
@@ -163,6 +164,10 @@ public class HomeController : Controller
     
     public IActionResult ViewRecipePage()
     {
+        ViewData["test"] = new[]
+        {
+            new RecipeViewModel { RecipeId = 1, Categories = "product 1" }
+        };
         return View();
     }
 

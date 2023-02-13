@@ -1,7 +1,4 @@
-﻿@{
-    ViewData["Title"] = "Search results";
-}
-
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 <form action="{{ url_for('keyword_search') }}" method="post" class="add-entry" id="keyword_Search">
     <div class="container">
         <div class="input-group rounded w-25">

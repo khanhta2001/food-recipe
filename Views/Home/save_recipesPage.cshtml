@@ -1,4 +1,5 @@
-﻿<ul class="saved_recipes" id="saved_recipes">
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+<ul class="saved_recipes" id="saved_recipes">
     {% for recipe in saved_recipes %}
     <div class="container">
         <div class="text-center">
