@@ -1,0 +1,23 @@
+@* @using Microsoft.AspNetCore.Mvc.TagHelpers *@
+@* <div class="container w-75"> *@
+@*     <form enctype="multipart/form-data" asp-controller="Home" asp-action="CreateRecipe" method="post" class="mt-3"> *@
+@*         <dl> *@
+@*             <dt><label for="titleInput" class="form-label">Title:</label> *@
+@*             <dd><input type="text" class="form-control" id="titleInput" name="title" required> *@
+@*             <dt><label for="categoryInput" class="form-label">Category:</label> *@
+@*             <dd><input type="text" size="30" class="form-control" id="categoryInput" name="category" required> *@
+@*             <dt><label class="form-label">Dietary Restrictions:</label> *@
+@*             <br> *@
+@*             @for (var i = 0; i < Model["Tags"].length; i++) *@
+@*             { *@
+@*                 { *@
+@*                     <input type="checkbox" id="tagName" name="tag_id" value=i> *@
+@*                     <label for="tagName">@Model["Tags"]["Name"]</label><br> *@
+@*                 } *@
+@*             } *@
+@*             <dt><label for="textareaInput" class="form-label">Text:</label> *@
+@*             <dd><textarea name="content" class="form-control" id="textareaInput" rows="5" cols="40" required></textarea> *@
+@*             <dt><button asp-page-handler="Upload" class="btn" type="submit" value="Upload">Post</button> *@
+@*         </dl> *@
+@*     </form> *@
+@* </div> *@
