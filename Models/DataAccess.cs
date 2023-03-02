@@ -1,6 +1,11 @@
-﻿namespace WebApp.Models;
+﻿using Microsoft;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
-public class DataAccess
+namespace WebApp.Models
 {
-    
+    public class DataAccess : DbContext
+    {
+        
+    }
 }
