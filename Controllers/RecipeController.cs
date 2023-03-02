@@ -4,17 +4,39 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WebApp.Models;
+
 
 namespace WebApp.Controllers
 {
     public class RecipeController : Controller
     {
+        private readonly DataService dataService;
+
+
+        // public RecipeController(DataContext dataContext)
+        // {
+        //     this.dataService = new DataService(dataContext);
+        // }
         [AllowAnonymous]
         [HttpGet]
         [Route("CreateRecipePage")]
         public IActionResult CreateRecipePage()
         {
             return View("CreateRecipe");
+        }
+        
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("CreateRecipe")]
+        public IActionResult CreateRecipe(RecipeViewModel RecipeViewModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+            
+            return View("ViewRecipePage");
         }
         
         [AllowAnonymous]
