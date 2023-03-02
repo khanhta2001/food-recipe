@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace WebApp.Controllers
 {
@@ -34,6 +35,22 @@ namespace WebApp.Controllers
         public IActionResult Notification()
         {
             return HomePage();
+        }
+        
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("SearchResults")]
+        public IActionResult SearchResults()
+        {
+            return View("SearchResults");
+        }
+        
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("Search")]
+        public IActionResult Search()
+        {
+            return View("SearchResults");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
