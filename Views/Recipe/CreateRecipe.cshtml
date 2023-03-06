@@ -1,5 +1,4 @@
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using WebApp.Models
+@model WebApp.Models.RecipeViewModel
 @{
     Layout = "_Layout";
 }
@@ -25,8 +24,8 @@
         @Html.PasswordFor(x => x.DietaryRestriction)
         @Html.ValidationMessageFor(x => x.DietaryRestriction)
     </div>
+    @Html.ValidationSummary()
     <p>
-        <button type="submit" class="btn btn-primary" role="button">Login</button>
         <a class="btn btn-primary" href="@(this.Url.Action("CreateRecipe", "Recipe"))">Create Recipe</a>
     </p>
 }

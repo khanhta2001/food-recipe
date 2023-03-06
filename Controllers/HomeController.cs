@@ -14,7 +14,10 @@ namespace WebApp.Controllers
         {
             _logger = logger;
         }
-
+        
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("Home")]
         public IActionResult HomePage()
         {
             HttpContext.Session.SetString("username", "Khanh");
