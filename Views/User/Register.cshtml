@@ -1,23 +1,33 @@
-﻿@{
+﻿@model WebApp.Models.RegisterViewModel
+@{
     ViewData["Title"] = "Register";
 }
-<main>
-    <div class="auth-form px-3" id="Register">
-        <div class="auth-form-header p-0">
-            <h1>Register</h1>
-        </div>
-        <div class="auth-form-body mt-3">
-            <form action="{{ url_for ('register')}}" method="post" name="login">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username">
-                <label for="Email">Email</label>
-                <input type="Email" class="form-control" name="Email" id="Email">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control">
-                <label for="RetypePassword">Retype Password</label>
-                <input type="password" class="form-control" name="RetypePassword" id="RetypePassword">
-                <input type="submit" name="commit" value="Register" class="btn btn-primary btn-block">
-            </form>
-        </div>
+<div class="auth-form px-3" id="Register">
+    <div class="auth-form-header p-0">
+        <h1>Register</h1>
     </div>
-</main>
+    <div class="auth-form-body mt-3">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group row">
+                @Html.LabelFor(x => x.Username)
+                @Html.EditorFor(x => x.Username)
+                @Html.ValidationMessageFor(x => x.Username)
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.Password)
+                @Html.EditorFor(x => x.Password)
+                @Html.ValidationMessageFor(x => x.Password)
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.PasswordConfirm)
+                @Html.EditorFor(x => x.PasswordConfirm)
+                @Html.ValidationMessageFor(x => x.PasswordConfirm)
+            </div>
+            @Html.ValidationSummary()
+            <p>
+                <a class="btn btn-primary" href="@(this.Url.Action("Register", "User"))">Register</a>
+            </p>
+        }
+    </div>
+</div>

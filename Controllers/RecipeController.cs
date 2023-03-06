@@ -73,6 +73,14 @@ namespace WebApp.Controllers
         
         [AllowAnonymous]
         [HttpGet]
+        [Route("LikeRecipe")]
+        public IActionResult LikeRecipe()
+        {
+            return View("ViewRecipePage");
+        }
+        
+        [AllowAnonymous]
+        [HttpGet]
         [Route("ViewRecipePage")]
         public IActionResult ViewRecipePage()
         {

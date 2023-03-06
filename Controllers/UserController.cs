@@ -17,6 +17,15 @@ namespace WebApp.Controllers
             return View("Login");
         }
         
+        
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("Login")]
+        public IActionResult Login()
+        {
+            return Redirect("Home");
+        }
+        
         [AllowAnonymous]
         [HttpGet]
         [Route("RegisterPage")]
@@ -27,7 +36,7 @@ namespace WebApp.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        [Route("RegisterPage")]
+        [Route("Register")]
         public IActionResult Register()
         {
             return View("Register");

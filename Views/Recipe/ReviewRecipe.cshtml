@@ -1,10 +1,16 @@
-<div class="container w-75">
-    <form action="{{ url_for('post_review') }}" method="post" class="post_review">
-        <dl>
-            <dt><label for="textareaInput" class="form-label">Enter your review here:</label>
-            <dd><textarea name="review" class="form-control" id="textareaInput" rows="5" cols="40"></textarea>
-            <dt><button type="submit" class="btn btn-dark mb-3">Post</button>
-            <input type="hidden" name="review_me" value={{ recipe.id }}>
-        </dl>
-    </form>
-</div>
+@model WebApp.Models.ReviewViewModel
+@{
+    Layout = "_Layout";
+}
+@using (Html.BeginForm())
+{
+    <div class="form-group row">
+        @Html.LabelFor(x => x.Review)
+        @Html.EditorFor(x => x.Review)
+        @Html.ValidationMessageFor(x => x.Review)
+    </div>
+    @Html.ValidationSummary()
+    <p>
+        <a class="btn btn-primary" href="@(this.Url.Action("ReviewRecipe", "Recipe"))">Review</a>
+    </p>
+}
