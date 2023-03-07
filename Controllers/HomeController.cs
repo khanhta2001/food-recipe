@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Net;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -51,9 +53,18 @@ namespace WebApp.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("Search")]
-        public IActionResult Search()
+        public IActionResult Search(string searchText)
         {
-            return View("SearchResults");
+            searchText = HttpUtility.UrlDecode(searchText);
+            searchText = string.IsNullOrEmpty(searchText) ? string.Empty : searchText.Replace("/", string.Empty).Replace("\\", string.Empty);
+            if (string.IsNullOrEmpty(searchText))
+            {
+                return this.RedirectToAction("HomePage", "Home");
+            }
+            else
+            {
+                return this.RedirectToAction("SearchResults", "Home");
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
