@@ -37,19 +37,12 @@
                 <img src="images/upper_frame.png" class="img-fluid" alt="upper frame">
                 <div class="text-center fs-3">
                     <p>Recipe of the Day</p>
-                    <a href="{{ url_for ('view_recipe', recipe_id=recipe.recipe_id, recipe='recipe_of_the_day')}}">
+                    <a href="@(this.Url.Action("CreateRecipe", "Recipe"))">
                         <img src="images/closed_tray.png" class="img-fluid" alt="recipe_of_the_day" id="recipe_of_the_day">
                     </a>
                 </div>
-                <form action="{{ url_for('keyword_search') }}" method="post" class="add-entry" id="keyword_Search">
-                    <div class="container w-75">
-                        <div class="input-group rounded">
-                          <input type="text" name="keyword_Search" class="form-control rounded" placeholder="Type in a keyword" aria-label="Search" aria-describedby="search-addon" />
-                          <button class="btn btn-outline-dark" type="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
-                    <img src="images/lower_frame.png" class="img-fluid" alt="lower frame">
+                @await Html.PartialAsync("_SearchBarPartial")
+                <img src="images/lower_frame.png" class="img-fluid" alt="lower frame">
                 </div>
             </div>
     </div>
