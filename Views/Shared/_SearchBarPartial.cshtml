@@ -1,0 +1,9 @@
+﻿@using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "form-inline" }))
+{
+    <div class="container w-75">
+        <div class="input-group rounded">
+            @Html.Editor("searchText", new { htmlAttributes = new { @autocomplete = "off", @class = "form-control" }, @Value = @ViewData["Search"] })
+            <button class="btn btn-outline-dark" type="submit">Search</button>
+        </div>
+    </div>   
+}
