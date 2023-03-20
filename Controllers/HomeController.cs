@@ -4,22 +4,25 @@ using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
-
+using WebApp.Services;
 
 namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        
+        private readonly DataService _dataService;
+        
+        public HomeController(ILogger<HomeController> logger, DataService dataService)
         {
             _logger = logger;
+            _dataService = dataService;
         }
         
         [AllowAnonymous]
         [HttpGet]
-        [Route("Home")]
+        [Route("")]
         public IActionResult HomePage()
         {
             HttpContext.Session.SetString("username", "Khanh");
@@ -53,7 +56,7 @@ namespace WebApp.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("Search")]
-        public IActionResult Search(string searchText)
+        public async Task<IActionResult> Search(string searchText)
         {
             searchText = HttpUtility.UrlDecode(searchText);
             searchText = string.IsNullOrEmpty(searchText) ? string.Empty : searchText.Replace("/", string.Empty).Replace("\\", string.Empty);
@@ -63,6 +66,7 @@ namespace WebApp.Controllers
             }
             else
             {
+                // await _dataService.GetAsync();
                 return this.RedirectToAction("SearchResults", "Home");
             }
         }
