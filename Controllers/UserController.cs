@@ -15,7 +15,9 @@ namespace WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         
         private readonly DataService _dataService;
-        
+
+        private readonly IPasswordHasher<HomeController> _passwordHasher;
+
         public UserController(ILogger<HomeController> logger, DataService dataService)
         {
             _logger = logger;
@@ -33,9 +35,28 @@ namespace WebApp.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("Login")]
-        public IActionResult Login()
+        public IActionResult Login(LoginViewModel loginViewModel)
         {
-            return Redirect("Home");
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var user = loginViewModel.Username;
+            var password = loginViewModel.Password;
+            
+            var existingUser = this._dataService.FindVariable<UserViewModel>(user, "UserViewModel", "User");
+            if (existingUser == null)
+            {
+                return this.View();
+            }
+            
+            var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(null, existingUser.Password, password);
+            if (passwordVerificationResult == PasswordVerificationResult.Success)
+            {
+                return Redirect("Home");
+            }
+            return this.View();
         }
         
         [AllowAnonymous]
@@ -58,8 +79,8 @@ namespace WebApp.Controllers
 
             var currentUser = registerViewModel.Username;
 
-            UserViewModel existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel");
-            if (existingUser != null)
+            UserViewModel existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "User");
+            if (existingUser == null)
             {
                 return Redirect("RegisterPage");
             }
@@ -72,7 +93,7 @@ namespace WebApp.Controllers
                 Password = passwordHasher.HashPassword(null, registerViewModel.Password),
                 Summary = "Please add here!"
             };
-            this._dataService.AddModel<UserViewModel>(user, "UserAccounts");
+            this._dataService.AddModel<UserViewModel>(user, "UserViewModel");
             return View("Login");
         }
         
