@@ -39,13 +39,20 @@ namespace WebApp.Services
         
         public T? FindVariable<T>(string variableName, string collectionName)
         {
-            var recipeCollection = _mongoDatabase.GetCollection<T>(collectionName);
+            var variableCollection = _mongoDatabase.GetCollection<T>(collectionName);
             
             var filter = Builders<T>.Filter.Eq("Title", new BsonRegularExpression(".*{variableName}.*", "i"));
             
-            var allRecipe = recipeCollection.Find(filter).FirstOrDefault();
+            var allRecipe = variableCollection.Find(filter).FirstOrDefault();
             
             return allRecipe;
+        }
+        
+        public void AddModel<T>(T model, string collectionName)
+        {
+            var modelCollection = _mongoDatabase.GetCollection<T>(collectionName);
+
+            modelCollection.InsertOne(model);
         }
     }   
 }
