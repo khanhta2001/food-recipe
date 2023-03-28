@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using Microsoft.AspNetCore.Identity;
 using WebApp.Models;
 using WebApp.Services;
@@ -91,10 +93,30 @@ namespace WebApp.Controllers
             {
                 Username = registerViewModel.Username,
                 Password = passwordHasher.HashPassword(null, registerViewModel.Password),
-                Summary = "Please add here!"
+                Verified = "No"
             };
             this._dataService.AddModel<UserViewModel>(user, "UserViewModel");
-            return View("Login");
+            var rand = new Random();
+            var OTP = rand.Next(100000,999999);;
+            
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential("testdevappfood@gmail.com", "ozxbpxdxfkumqodf"),
+                EnableSsl = true
+
+            };
+
+            var mailMessage = new MailMessage()
+            {
+                From = new MailAddress("testdevappfood@gmail.com"),
+                Subject = "Email registration for Food Recipe Account",
+                Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "Thank you,\nFood Recipe Admin team"
+            };
+            mailMessage.To.Add(registerViewModel.Email);
+            smtpClient.Send(mailMessage);
+            
+            return View("VerificationOtp", OTP = OTP);
         }
         
         [AllowAnonymous]

@@ -11,7 +11,10 @@ namespace WebApp.Models
         [Required]
         [StringLength(25)]
         public string? Username { get; set; }
-
+        
+        [Required]
+        [StringLength(25)]
+        public string? Email { get; set; }
         
         [Required]
         [DataType(DataType.Password)]

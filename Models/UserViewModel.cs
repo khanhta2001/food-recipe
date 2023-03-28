@@ -11,6 +11,6 @@ namespace WebApp.Models
 
         public string? Password { get; set; }
 
-        public string? Summary { get; set; }
+        public string? Verified { get; set; }
     }   
 }
