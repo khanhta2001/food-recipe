@@ -48,9 +48,12 @@ namespace WebApp.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("SearchResults")]
-        public IActionResult SearchResults()
+        public IActionResult SearchResults(string search)
         {
-            return View("SearchResults");
+            search = HttpUtility.UrlDecode(search);
+            this.ViewData["Search"] = search;
+            var recipe = this._dataService.FindAllRecipes(search, "Recipe");
+            return View(recipe);
         }
         
         [AllowAnonymous]
@@ -66,8 +69,7 @@ namespace WebApp.Controllers
             }
             else
             {
-                // await _dataService.GetAsync();
-                return this.RedirectToAction("SearchResults", "Home");
+                return this.RedirectToAction("SearchResults", "Home", new {search = searchText});
             }
         }
 

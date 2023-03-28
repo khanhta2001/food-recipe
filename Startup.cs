@@ -1,4 +1,4 @@
-﻿using WebApp;
+﻿﻿using WebApp;
 using WebApp.Services;
 using Microsoft.Extensions.Configuration;
 using WebApp.Models;
@@ -26,10 +26,11 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            var ConnectionUrl = config.GetSection("MongoDB:ConnectionUrl").Value;
-            var DatabaseName = config.GetSection("MongoDB:DatabaseName").Value;
-            var mongoClient = new MongoClient(ConnectionUrl);
-            var mongoDatabase = mongoClient.GetDatabase(DatabaseName);
+            var connectionUrl = config.GetSection("MongoDB:ConnectionUrl").Value;
+            var databaseName = config.GetSection("MongoDB:DatabaseName").Value;
+            var mongoClient = new MongoClient(connectionUrl);
+            var mongoDatabase = mongoClient.GetDatabase(databaseName);
+            // services.Configure<MongoDBSettings>(new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("MongoDB:ConnectionUrl"));
             services.AddSingleton<IMongoDatabase>(mongoDatabase);
             services.AddScoped<DataService>();
             services.AddControllersWithViews();

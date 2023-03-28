@@ -1,5 +1,6 @@
+@model WebApp.Models.VerificationViewModel
 @{
-    ViewData["Title"] = "Verification OTP";
+    ViewData["Title"] = "verificationOTP";
 }
 
 <main>
@@ -8,13 +9,19 @@
     </div>
     <div class="auth-form px-3" id="verification">
         <div class="auth-form-body mt-3">
-            <form action="{{ url_for ('verification')}}" method="post" name="verification">
-                <label for="OTP" class="form-label">Verification Code</label>
-                <input type="text" class="form-control" name="OTP" id="OTP">
-                <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                <input type="hidden" name="account_email" value="{{ account_email }}">
-                <input type="hidden" name="verification_type" value="{{ verification_type }}">
-            </form>
+            @using (Html.BeginForm())
+            {
+                <div class="form-group row">
+                    @Html.LabelFor(x => x.OTP)
+                    @Html.EditorFor(x => x.OTP)
+                    @Html.ValidationMessageFor(x => x.OTP)
+                </div>
+                @Html.ValidationSummary()
+                <p>
+                    <a class="btn btn-primary" href="@(this.Url.Action("VerificationOtp", "User"))">Submit</a>
+                </p>
+            }
         </div>
     </div>
 </main>
+
