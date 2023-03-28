@@ -2,13 +2,12 @@
 @{
     ViewData["Title"] = "Login";
 }
-<>
 <div class="auth-form px-3" id="login">
     <div class="auth-form-header p-0">
         <h1>Sign in</h1>
     </div>
     <div class="auth-form-body mt-3">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("Login", "User"))
         {
             <div class="form-group row">
                 @Html.LabelFor(x => x.Username)
@@ -20,13 +19,13 @@
                 @Html.EditorFor(x => x.Password)
                 @Html.ValidationMessageFor(x => x.Password)
             </div>
-            @Html.ValidationSummary()
             <p>
-                <a class="btn btn-primary" href="@(this.Url.Action("Login", "User"))">Login</a>
+                <input id = "Submit" type = "submit" value = "submit" />
+                @* <a class="btn btn-primary" href="@(this.Url.Action("Login", "User"))">Login</a> *@
             </p>
             <div class="login-callout mt-3">
                 New to Food Recipe?
-                <a href="@(this.Url.Action("RegisterPage", "User"))">Create an account</a>
+                <a href="@(this.Url.Action("Register", "User"))">Create an account</a>
             </div>
             <div class="login-callout mt-3">
                 Forgot Your Password?

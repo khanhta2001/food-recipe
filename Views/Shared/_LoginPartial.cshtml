@@ -5,25 +5,21 @@
         <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="NotificationsPage">Register</a>
     </li>
     <li class="nav-item">
-        @* href="@this.Url.Action("LoginPage", "User")" asp-area="" asp-controller="Home" asp-action="save_recipesPage"*@
-        <a class="nav-link text-dark" href="@this.Url.Action("LoginPage", "User")">Recipes</a>
+        <a class="nav-link text-dark" href="@this.Url.Action("Login", "User")">Recipes</a>
     </li>
     <li class="nav-item">
-        @* href="@this.Url.Action("LoginPage", "User")" asp-area="" asp-controller="Home" asp-action="UserAccount"*@
-        <a class="nav-link text-dark" href="@this.Url.Action("LoginPage", "User")">@this.User.Identity.Name</a>
+        <a class="nav-link text-dark" href="@this.Url.Action("Login", "User")">@this.User.Identity.Name</a>
     </li>
     <li class="nav-item">
-        @* href="@this.Url.Action("LoginPage", "User") asp-area="" asp-controller="Home" asp-action="Logout""*@
-        <a class="nav-link text-dark" @this.Url.Action("LoginPage", "User")>Logout</a>
+        <a class="nav-link text-dark" @this.Url.Action("Login", "User")>Logout</a>
     </li>
 }
 else
 {
     <li class="nav-item">
-        @* href="@this.Url.Action("LoginPage", "User") asp-area="" asp-controller="Home" asp-action="RegisterPage""*@
-        <a class="nav-link text-dark" href="@this.Url.Action("RegisterPage", "User")">Register</a>
+        <a class="nav-link text-dark" href="@this.Url.Action("Register", "User")">Register</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark" href="@this.Url.Action("LoginPage", "User")">Login</a> 
+        <a class="nav-link text-dark" href="@this.Url.Action("Login", "User")">Login</a> 
     </li>   
 }
