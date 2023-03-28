@@ -27,15 +27,15 @@ namespace WebApp.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        [Route("LoginPage")]
-        public IActionResult LoginPage()
+        [Route("Login")]
+        public IActionResult Login()
         {
             return View("Login");
         }
         
         
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route("Login")]
         public IActionResult Login(LoginViewModel loginViewModel)
         {
@@ -63,8 +63,8 @@ namespace WebApp.Controllers
         
         [AllowAnonymous]
         [HttpGet]
-        [Route("RegisterPage")]
-        public IActionResult RegisterPage()
+        [Route("Register")]
+        public IActionResult Register()
         {
             return View("Register");
         }
@@ -116,7 +116,7 @@ namespace WebApp.Controllers
             mailMessage.To.Add(registerViewModel.Email);
             smtpClient.Send(mailMessage);
             
-            return View("VerificationOtp", OTP = OTP);
+            return View("VerificationOtp");
         }
         
         [AllowAnonymous]
@@ -125,6 +125,14 @@ namespace WebApp.Controllers
         public IActionResult ResetPassword()
         {
             return View("ResetPassword");
+        }
+        
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("ResetPassword")]
+        public IActionResult ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            return View("VerificationOTP");
         }
         
         [AllowAnonymous]
