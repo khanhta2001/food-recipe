@@ -14,15 +14,10 @@ namespace WebApp.Controllers
 {
     public class UserController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        
         private readonly DataService _dataService;
 
-        private readonly IPasswordHasher<HomeController> _passwordHasher;
-
-        public UserController(ILogger<HomeController> logger, DataService dataService)
+        public UserController( DataService dataService)
         {
-            _logger = logger;
             _dataService = dataService;
         }
         [AllowAnonymous]
@@ -52,11 +47,11 @@ namespace WebApp.Controllers
             {
                 return this.View();
             }
-            
-            var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(null, existingUser.Password, password);
+            PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
+            var passwordVerificationResult = passwordHasher.VerifyHashedPassword(null, existingUser.Password, password);
             if (passwordVerificationResult == PasswordVerificationResult.Success)
             {
-                return Redirect("Home");
+                return this.RedirectToAction("HomePage", "Home");
             }
             return this.View();
         }
@@ -70,7 +65,7 @@ namespace WebApp.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route("Register")]
         public IActionResult Register(RegisterViewModel registerViewModel)
         {
@@ -87,18 +82,19 @@ namespace WebApp.Controllers
                 return Redirect("RegisterPage");
             }
             
+            var rand = new Random();
+            var OTP = rand.Next(100000,999999);;
+            
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
             
             UserViewModel user = new UserViewModel()
             {
                 Username = registerViewModel.Username,
                 Password = passwordHasher.HashPassword(null, registerViewModel.Password),
-                Verified = "No"
+                Verified = OTP.ToString()
             };
             this._dataService.AddModel<UserViewModel>(user, "UserViewModel");
-            var rand = new Random();
-            var OTP = rand.Next(100000,999999);;
-            
+
             var smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
