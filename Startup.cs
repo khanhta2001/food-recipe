@@ -1,37 +1,31 @@
-﻿﻿using WebApp;
-using WebApp.Services;
-using Microsoft.Extensions.Configuration;
-using WebApp.Models;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using WebApp.Models;
-using Microsoft.Extensions.Options;
+﻿using WebApp.Services;
 using MongoDB.Driver;
-using MongoDB.Bson;
+
 namespace WebApp
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
-            IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            var connectionUrl = config.GetSection("MongoDB:ConnectionUrl").Value;
-            var databaseName = config.GetSection("MongoDB:DatabaseName").Value;
-            var mongoClient = new MongoClient(connectionUrl);
-            var mongoDatabase = mongoClient.GetDatabase(databaseName);
-            // services.Configure<MongoDBSettings>(new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("MongoDB:ConnectionUrl"));
-            services.AddSingleton<IMongoDatabase>(mongoDatabase);
+            services.AddSingleton<IMongoClient>(serviceProvider =>
+            {
+                IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                var connectionUrl = config.GetSection("MongoDB:ConnectionUrl").Value;
+                return new MongoClient(connectionUrl);
+            });
+            services.AddScoped<IMongoDatabase>(serviceProvider =>
+            {
+                var mongoClient = serviceProvider.GetRequiredService<IMongoClient>();
+                IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                var databaseName = config.GetSection("MongoDB:DatabaseName").Value;
+                return mongoClient.GetDatabase(databaseName);
+            });
             services.AddScoped<DataService>();
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
