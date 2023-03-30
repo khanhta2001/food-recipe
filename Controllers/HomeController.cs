@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
-using WebApp.Models;
+using FoodRecipe.Models;
 using Microsoft.AspNetCore.Authorization;
-using WebApp.Services;
+using FoodRecipe.Services;
 
-namespace WebApp.Controllers
+namespace FoodRecipe.Controllers
 {
     public class HomeController : Controller
     {

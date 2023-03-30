@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 
-namespace WebApp.Models
+namespace FoodRecipe.Models
 {
     public class ResetPasswordViewModel
     {

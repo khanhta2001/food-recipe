@@ -10,9 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MongoDB.Bson;
-using WebApp.Models;
+using FoodRecipe.Models;
 
-namespace WebApp.Services
+namespace FoodRecipe.Services
 {
     public class DataService
     {

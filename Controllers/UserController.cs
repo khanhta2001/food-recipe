@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Mail;
-using WebApp.Models;
-using WebApp.Services;
+using FoodRecipe.Models;
+using FoodRecipe.Services;
 
-namespace WebApp.Controllers
+namespace FoodRecipe.Controllers
 {
     public class UserController : Controller
     {
