@@ -1,7 +1,7 @@
-﻿using WebApp.Services;
+﻿using FoodRecipe.Services;
 using MongoDB.Driver;
 
-namespace WebApp
+namespace FoodRecipe
 {
     public class Startup
     {

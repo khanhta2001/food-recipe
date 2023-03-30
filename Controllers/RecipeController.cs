@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApp.Services;
-using WebApp.Models;
+using FoodRecipe.Services;
+using FoodRecipe.Models;
 
 
-namespace WebApp.Controllers
+namespace FoodRecipe.Controllers
 {
     public class RecipeController : Controller
     {

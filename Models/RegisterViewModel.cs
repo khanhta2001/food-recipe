@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.Models
+namespace FoodRecipe.Models
 {
     /// <summary>
     /// The class that is used to represent the register page view model.

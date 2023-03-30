@@ -1,4 +1,4 @@
-﻿namespace WebApp.Models
+﻿namespace FoodRecipe.Models
 {
     public class VerificationViewModel
     {

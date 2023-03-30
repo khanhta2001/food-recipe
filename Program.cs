@@ -1,5 +1,5 @@
-using WebApp;
-using WebApp.Services;
+using FoodRecipe;
+using FoodRecipe.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
