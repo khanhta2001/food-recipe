@@ -120,11 +120,11 @@ namespace FoodRecipe.Controllers
         }
         
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route("ResetPassword")]
         public IActionResult ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
         {
-            return View("VerificationOTP");
+            return this.RedirectToAction("Login", "User");
         }
         
         [AllowAnonymous]
