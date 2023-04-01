@@ -71,11 +71,12 @@ namespace FoodRecipe.Controllers
             }
 
             var currentUser = registerViewModel.Username;
-
+            var currentEmail = registerViewModel.Email;
             UserViewModel existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "User");
-            if (existingUser == null)
+            UserViewModel existingEmail = this._dataService.FindVariable<UserViewModel>(currentEmail,"UserViewModel", "Email");
+            if (existingUser != null && existingEmail != null)
             {
-                return Redirect("RegisterPage");
+                return this.RedirectToAction("Register", "User");
             }
             
             var rand = new Random();
@@ -86,6 +87,7 @@ namespace FoodRecipe.Controllers
             UserViewModel user = new UserViewModel()
             {
                 Username = registerViewModel.Username,
+                Email = registerViewModel.Email,
                 Password = passwordHasher.HashPassword(null, registerViewModel.Password),
                 Verified = OTP.ToString()
             };
@@ -96,7 +98,6 @@ namespace FoodRecipe.Controllers
                 Port = 587,
                 Credentials = new NetworkCredential("testdevappfood@gmail.com", "ozxbpxdxfkumqodf"),
                 EnableSsl = true
-
             };
 
             var mailMessage = new MailMessage()

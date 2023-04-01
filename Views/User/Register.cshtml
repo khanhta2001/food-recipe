@@ -7,7 +7,7 @@
         <h1>Register</h1>
     </div>
     <div class="auth-form-body mt-3">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("Register", "User"))
         {
             <div class="form-group row">
                 @Html.LabelFor(x => x.Username)
@@ -29,9 +29,9 @@
                 @Html.EditorFor(x => x.PasswordConfirm)
                 @Html.ValidationMessageFor(x => x.PasswordConfirm)
             </div>
-            @Html.ValidationSummary()
             <p>
-                <a class="btn btn-primary" href="@(this.Url.Action("Register", "User"))">Register</a>
+                <input id = "Submit" type = "submit" value = "submit" class="btn btn-primary" />
+                @* <a class="btn btn-primary" href="@(this.Url.Action("Register", "User"))">Register</a> *@
             </p>
         }
     </div>
