@@ -74,13 +74,13 @@ namespace FoodRecipe.Controllers
             var currentEmail = registerViewModel.Email;
             UserViewModel existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "User");
             UserViewModel existingEmail = this._dataService.FindVariable<UserViewModel>(currentEmail,"UserViewModel", "Email");
-            if (existingUser != null && existingEmail != null)
+            if (existingUser != null || existingEmail != null)
             {
                 return this.RedirectToAction("Register", "User");
             }
             
             var rand = new Random();
-            var OTP = rand.Next(100000,999999);;
+            var OTP = rand.Next(100000,999999);
             
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
             
@@ -91,24 +91,23 @@ namespace FoodRecipe.Controllers
                 Password = passwordHasher.HashPassword(null, registerViewModel.Password),
                 Verified = OTP.ToString()
             };
+            try
+            {
+                var message = new MailMessage();
+                message.From = new MailAddress("testdevappfood@gmail.com");
+                message.To.Add(currentEmail);
+                message.Subject = "Email registration for Food Recipe Account";
+                message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
+
+                var smtpClient = new SmtpClient("smtp.gmail.com", 465);
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", "zunwbqrzjefhgohs");
+                smtpClient.Send(message);   
+            }
+            catch (Exception ex)
+            {
+                return this.RedirectToAction("Register", "User");
+            }
             this._dataService.AddModel<UserViewModel>(user, "UserViewModel");
-
-            var smtpClient = new SmtpClient("smtp.gmail.com")
-            {
-                Port = 587,
-                Credentials = new NetworkCredential("testdevappfood@gmail.com", "ozxbpxdxfkumqodf"),
-                EnableSsl = true
-            };
-
-            var mailMessage = new MailMessage()
-            {
-                From = new MailAddress("testdevappfood@gmail.com"),
-                Subject = "Email registration for Food Recipe Account",
-                Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "Thank you,\nFood Recipe Admin team"
-            };
-            mailMessage.To.Add(registerViewModel.Email);
-            smtpClient.Send(mailMessage);
-            
             return View("VerificationOtp");
         }
         
