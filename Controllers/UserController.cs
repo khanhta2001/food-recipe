@@ -72,8 +72,8 @@ namespace FoodRecipe.Controllers
 
             var currentUser = registerViewModel.Username;
             var currentEmail = registerViewModel.Email;
-            UserViewModel existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "User");
-            UserViewModel existingEmail = this._dataService.FindVariable<UserViewModel>(currentEmail,"UserViewModel", "Email");
+            var existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "User");
+            var existingEmail = this._dataService.FindVariable<UserViewModel>(currentEmail,"UserViewModel", "Email");
             if (existingUser != null || existingEmail != null)
             {
                 return this.RedirectToAction("Register", "User");
@@ -130,9 +130,15 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("VerificationOtp")]
-        public IActionResult VerificationOtp()
+        public IActionResult VerificationOtp(VerificationViewModel verificationViewModel)
         {
-            return View("VerificationOTP");
+            var userOTP = verificationViewModel.OTP;
+            var correct = this._dataService.FindVariable<UserViewModel>(userOTP,"UserViewModel", "User");
+            if (correct == null)
+            {
+                return View("VerificationOtp");
+            }
+            return View("Login");
         }
         
         [AllowAnonymous]
