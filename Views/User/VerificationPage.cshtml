@@ -16,9 +16,13 @@
                     @Html.EditorFor(x => x.Email)
                     @Html.ValidationMessageFor(x => x.Email)
                 </div>
-                @Html.ValidationSummary()
+                <div class="form-group row">
+                    @Html.LabelFor(x => x.OTP)
+                    @Html.EditorFor(x => x.OTP)
+                    @Html.ValidationMessageFor(x => x.OTP)
+                </div>
                 <p>
-                    <a class="btn btn-primary" href="@(this.Url.Action("VerificationOtp", "User"))">Submit</a>
+                    <input id = "Submit" type = "submit" value = "submit" class="btn btn-primary" />
                 </p>
             }
         </div>

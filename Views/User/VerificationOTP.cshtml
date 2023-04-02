@@ -16,9 +16,8 @@
                     @Html.EditorFor(x => x.OTP)
                     @Html.ValidationMessageFor(x => x.OTP)
                 </div>
-                @Html.ValidationSummary()
                 <p>
-                    <a class="btn btn-primary" href="@(this.Url.Action("VerificationOtp", "User"))">Submit</a>
+                    <input id = "Submit" type = "submit" value = "submit" class="btn btn-primary" />
                 </p>
             }
         </div>
