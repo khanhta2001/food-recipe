@@ -1,8 +1,4 @@
-﻿@{
-    Layout = "_Layout";
-    ViewData["Title"] = "Search results";
-}
-@model List<RecipeViewModel>
+﻿@model List<RecipeViewModel>
 @using (Html.BeginForm())
 {
     @await Html.PartialAsync("_SearchBarPartial")
