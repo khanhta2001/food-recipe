@@ -52,5 +52,13 @@ namespace FoodRecipe.Services
 
             modelCollection.InsertOne(model);
         }
+        
+        public void ChangeModel<T>(string variableName, string collectionName, string findPart)
+        {
+            var modelCollection = _mongoDatabase.GetCollection<T>(collectionName);
+            var filter = Builders<T>.Filter.Eq(findPart, variableName);
+            var update = Builders<T>.Update.Set(findPart, variableName);
+            modelCollection.UpdateOne(filter, update);
+        }
     }   
 }
