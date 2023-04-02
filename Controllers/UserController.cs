@@ -12,9 +12,12 @@ namespace FoodRecipe.Controllers
     {
         private readonly DataService _dataService;
 
-        public UserController( DataService dataService)
+        private readonly Data _data;
+
+        public UserController( DataService dataService, Data data)
         {
             _dataService = dataService;
+            _data = data;
         }
         [AllowAnonymous]
         [HttpGet]
@@ -100,14 +103,17 @@ namespace FoodRecipe.Controllers
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
                 var smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", "zunwbqrzjefhgohs");
-                smtpClient.Send(message);   
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _data.Password);
+                smtpClient.Send(message); 
             }
             catch (Exception ex)
             {
                 return this.RedirectToAction("Register", "User");
             }
             this._dataService.AddModel<UserViewModel>(user, "UserViewModel");
+            ViewData["VerificationReason"] = "Register";
+            var verification = new VerificationViewModel();
+            verification.VerificationReason = "Register Your Account";
             return View("VerificationOtp");
         }
         
@@ -132,11 +138,15 @@ namespace FoodRecipe.Controllers
         [Route("VerificationOtp")]
         public IActionResult VerificationOtp(VerificationViewModel verificationViewModel)
         {
-            var userOTP = verificationViewModel.OTP;
-            var correct = this._dataService.FindVariable<UserViewModel>(userOTP,"UserViewModel", "User");
-            if (correct == null)
+            if (verificationViewModel.VerificationReason == "Register")
             {
-                return View("VerificationOtp");
+                var userOTP = verificationViewModel.OTP;
+                var correct = this._dataService.FindVariable<UserViewModel>(userOTP,"UserViewModel", "User");
+                if (correct == null)
+                {
+                    return View("VerificationOtp");
+                }
+                this._dataService.ChangeModel<UserViewModel>(userOTP,"UserViewModel", "Verified");
             }
             return View("Login");
         }
