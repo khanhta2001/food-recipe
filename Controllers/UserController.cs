@@ -12,12 +12,10 @@ namespace FoodRecipe.Controllers
     {
         private readonly DataService _dataService;
 
-        private readonly Data _data;
 
-        public UserController( DataService dataService, Data data)
+        public UserController( DataService dataService)
         {
             _dataService = dataService;
-            _data = data;
         }
         [AllowAnonymous]
         [HttpGet]
