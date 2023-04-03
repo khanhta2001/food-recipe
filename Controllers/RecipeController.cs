@@ -8,31 +8,45 @@ namespace FoodRecipe.Controllers
 {
     public class RecipeController : Controller
     {
-        private readonly DataService dataService;
+        private readonly DataService _dataService;
 
 
-        // public RecipeController(DataContext dataContext)
-        // {
-        //     this.dataService = new DataService(dataContext);
-        // }
+        public RecipeController(DataService dataService)
+        {
+            _dataService = dataService;
+        }
         [AllowAnonymous]
         [HttpGet]
-        [Route("CreateRecipePage")]
-        public IActionResult CreateRecipePage()
+        [Route("CreateRecipe")]
+        public IActionResult CreateRecipe()
         {
             return View("CreateRecipe");
         }
         
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route("CreateRecipe")]
-        public IActionResult CreateRecipe(RecipeViewModel RecipeViewModel)
+        public IActionResult CreateRecipe(RecipeViewModel recipeViewModel)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View();
             }
+
+            var title = recipeViewModel.Title;
+            var content = recipeViewModel.Content;
+            var category = recipeViewModel.Category;
+            var dietaryRestriction = recipeViewModel.DietaryRestriction;
+
+            var recipe = new RecipeViewModel()
+            {
+                Title = title,
+                Content = content,
+                Category = category,
+                DietaryRestriction = dietaryRestriction
+            };
             
+            this._dataService.AddModel<RecipeViewModel>(recipe, "RecipeViewModel");
             return View("ViewRecipePage");
         }
         
@@ -41,6 +55,28 @@ namespace FoodRecipe.Controllers
         [Route("EditRecipe")]
         public IActionResult EditRecipe()
         {
+            return View("EditRecipe");
+        }
+        
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("EditRecipe")]
+        public IActionResult EditRecipe(RecipeViewModel recipeViewModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var title = recipeViewModel.Title;
+            var content = recipeViewModel.Content;
+            var category = recipeViewModel.Category;
+            var dietaryRestriction = recipeViewModel.DietaryRestriction;
+
+            this._dataService.ChangeModel<RecipeViewModel>(recipeViewModel.Id,"RecipeViewModel", "Id", "Title", title);
+            this._dataService.ChangeModel<RecipeViewModel>(recipeViewModel.Id,"RecipeViewModel", "Id", "content", content);
+            this._dataService.ChangeModel<RecipeViewModel>(recipeViewModel.Id,"RecipeViewModel", "Id", "category", category);
+            this._dataService.ChangeModel<RecipeViewModel>(recipeViewModel.Id,"RecipeViewModel", "Id", "dietaryRestriction", dietaryRestriction);
             return View("EditRecipe");
         }
 
