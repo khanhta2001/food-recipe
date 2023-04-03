@@ -14,9 +14,9 @@ namespace FoodRecipe.Controllers
         }
         
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route("Categories_recipes")]
-        public IActionResult Categories_recipes()
+        public IActionResult Categories_recipes(string categoriesType)
         {
             return View("Categories_recipes");
         }
