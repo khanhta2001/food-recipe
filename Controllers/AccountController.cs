@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FoodRecipe.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodRecipe.Controllers
@@ -14,11 +15,19 @@ namespace FoodRecipe.Controllers
         }
         
         [AllowAnonymous]
+        [HttpPost]
+        [Route("UpdateProfile")]
+        public IActionResult UpdateProfile(AccountViewModel accountViewModel)
+        {
+            return View("UserAccount");
+        }
+        
+        [AllowAnonymous]
         [HttpGet]
         [Route("UserAccount")]
         public IActionResult UserAccount()
         {
-            return View("UpdateProfile");
+            return View();
         }
     }
 }
