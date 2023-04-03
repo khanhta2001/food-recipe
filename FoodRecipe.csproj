@@ -29,6 +29,7 @@
       <Content Update="appsettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Include=".github\workflows\FoodRecipe.yaml" />
     </ItemGroup>
 
 </Project>

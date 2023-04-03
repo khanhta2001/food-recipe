@@ -1,0 +1,35 @@
+﻿name: FOOD RECIPE-CI Build and Test
+
+# Controls when the action will run. 
+on: [push]
+
+# jobs done by github
+jobs:
+  
+  build:
+
+    name: Build and Test
+    
+    # The type of runner that the job will run on
+    # Using github's runners until we can get docker running on our stuff
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: '6.0.x'
+    #runs-on: self-hosted
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
