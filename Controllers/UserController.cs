@@ -46,6 +46,12 @@ namespace FoodRecipe.Controllers
             {
                 return this.View();
             }
+
+            if (existingUser.Verification != "Verified")
+            {
+                return this.View();
+            }
+            
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
             var passwordVerificationResult = passwordHasher.VerifyHashedPassword(null, existingUser.Password, password);
             if (passwordVerificationResult == PasswordVerificationResult.Success)
@@ -77,7 +83,7 @@ namespace FoodRecipe.Controllers
             var currentEmail = registerViewModel.Email;
             var existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "User");
             var existingEmail = this._dataService.FindVariable<UserViewModel>(currentEmail,"UserViewModel", "Email");
-            if (existingUser != null || existingEmail != null)
+            if (existingUser == null || existingEmail == null)
             {
                 return this.RedirectToAction("Register", "User");
             }
@@ -85,14 +91,14 @@ namespace FoodRecipe.Controllers
             var rand = new Random();
             var OTP = rand.Next(100000,999999);
             
-            PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
+            var passwordHasher = new PasswordHasher<string>();
             
-            UserViewModel user = new UserViewModel()
+            var user = new UserViewModel()
             {
                 Username = registerViewModel.Username,
                 Email = registerViewModel.Email,
                 Password = passwordHasher.HashPassword(null, registerViewModel.Password),
-                Verified = OTP.ToString()
+                Verification = OTP.ToString()
             };
             try
             {
@@ -134,21 +140,30 @@ namespace FoodRecipe.Controllers
         }
         
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route("VerificationOtp")]
         public IActionResult VerificationOtp(VerificationViewModel verificationViewModel)
         {
-            if (verificationViewModel.VerificationReason == "Register")
+            var userOTP = verificationViewModel.OTP;
+            var correct = this._dataService.FindVariable<UserViewModel>(userOTP,"UserViewModel", "User");
+            if (correct == null)
             {
-                var userOTP = verificationViewModel.OTP;
-                var correct = this._dataService.FindVariable<UserViewModel>(userOTP,"UserViewModel", "User");
-                if (correct == null)
-                {
-                    return View("VerificationOtp");
-                }
-                this._dataService.ChangeModel<UserViewModel>(userOTP,"UserViewModel", "Verified");
+                return View("VerificationOtp");
             }
-            return View("Login");
+            this._dataService.ChangeModel<UserViewModel>(correct.Id,"UserViewModel", "Verification", "Verification", "Verified");
+            
+            if (verificationViewModel.VerificationReason is "Register" or "Verify Email")
+            {
+                return View("Login");
+            }
+            else if (verificationViewModel.VerificationReason == "Forget Password")
+            {
+                return this.RedirectToAction("ResetPassword", "User");
+            }
+            else
+            {
+                return View("VerificationOtp");
+            }
         }
         
         [AllowAnonymous]
@@ -157,6 +172,39 @@ namespace FoodRecipe.Controllers
         public IActionResult VerificationPage()
         {
             return View("VerificationPage");
+        }
+        
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("VerificationPage")]
+        public IActionResult VerifyEmail(string emailValue)
+        {
+            var existingEmail = this._dataService.FindVariable<UserViewModel>(emailValue,"UserViewModel", "Email");
+            if (existingEmail == null)
+            {
+                return this.RedirectToAction("Register", "User");
+            }
+            
+            var rand = new Random();
+            var OTP = rand.Next(100000,999999);
+            try
+            {
+                var message = new MailMessage();
+                message.From = new MailAddress("testdevappfood@gmail.com");
+                message.To.Add(emailValue);
+                message.Subject = "Email registration for Food Recipe Account";
+                message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
+
+                var smtpClient = new SmtpClient("smtp.gmail.com", 465);
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _data.Password);
+                smtpClient.Send(message); 
+            }
+            catch (Exception ex)
+            {
+                return this.RedirectToAction("Register", "User");
+            }
+            this._dataService.ChangeModel<UserViewModel>(existingEmail.Id,"UserViewModel", "Verification", "Verification", OTP.ToString());
+            return View("VerificationOtp");
         }
     }
 }
