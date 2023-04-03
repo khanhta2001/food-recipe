@@ -194,7 +194,7 @@ namespace FoodRecipe.Controllers
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
                 var smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _data.Password);
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", "_data.Password");
                 smtpClient.Send(message); 
             }
             catch (Exception ex)
