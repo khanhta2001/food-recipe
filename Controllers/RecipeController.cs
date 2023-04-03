@@ -89,6 +89,14 @@ namespace FoodRecipe.Controllers
         }
         
         [AllowAnonymous]
+        [HttpPost]
+        [Route("EditReviewRecipe")]
+        public IActionResult EditReviewRecipe(ReviewViewModel reviewViewModel)
+        {
+            return View("ViewRecipePage");
+        }
+        
+        [AllowAnonymous]
         [HttpGet]
         [Route("ReviewRecipe")]
         public IActionResult ReviewRecipe()
@@ -97,15 +105,23 @@ namespace FoodRecipe.Controllers
         }
         
         [AllowAnonymous]
-        [HttpGet]
-        [Route("SaveRecipe")]
-        public IActionResult SaveRecipe()
+        [HttpPost]
+        [Route("ReviewRecipe")]
+        public IActionResult ReviewRecipe(ReviewViewModel reviewViewModel)
         {
-            return View("SaveRecipe");
+            return View("ReviewRecipe");
         }
         
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
+        [Route("SaveRecipe")]
+        public IActionResult SaveRecipe(int recipeId)
+        {
+            return View("ViewRecipePage");
+        }
+        
+        [AllowAnonymous]
+        [HttpPost]
         [Route("LikeRecipe")]
         public IActionResult LikeRecipe()
         {
