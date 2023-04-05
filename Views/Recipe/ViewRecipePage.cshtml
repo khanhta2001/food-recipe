@@ -1,31 +1,26 @@
-@model FoodRecipe.Models.RecipeViewModel
 @{
     Layout = "_Layout";
 }
-
+<p>
+    <a class="btn btn-primary" href="@(this.Url.Action("EditRecipe", "Recipe"))">Save</a>
+</p>
 @using (Html.BeginForm())
 {
-    <div class="form-group row">
-        @Html.LabelFor(x => x.Title)
-        @Html.EditorFor(x => x.Title)
-        @Html.ValidationMessageFor(x => x.Title)
-    </div>
-    <div class="form-group row">
-        @Html.LabelFor(x => x.Category)
-        @Html.EditorFor(x => x.Category)
-        @Html.ValidationMessageFor(x => x.Category)
-    </div>
-    <div class="form-group row">
-        @Html.LabelFor(x => x.Content)
-        @Html.EditorFor(x => x.Content)
-        @Html.ValidationMessageFor(x => x.Content)
-    </div>
-    <div class="form-group row">
-        @Html.LabelFor(x => x.DietaryRestriction)
-        @Html.PasswordFor(x => x.DietaryRestriction)
-        @Html.ValidationMessageFor(x => x.DietaryRestriction)
-    </div>
-    @Html.ValidationSummary()
+    @foreach (RecipeViewModel recipeViewModel in Model.RecipeViewModel)
+    {
+        <div class="form-group row">
+            @recipeViewModel.Title
+        </div>
+        <div class="form-group row">
+            @recipeViewModel.Category
+        </div>
+        <div class="form-group row">
+            @recipeViewModel.Content
+        </div>
+        <div class="form-group row">
+            @recipeViewModel.DietaryRestriction
+        </div>   
+    }
     <p>
         <a class="btn btn-primary" href="@(this.Url.Action("SaveRecipe", "Recipe"))">Save</a>
     </p>
@@ -38,8 +33,14 @@
     <p>
         <a class="btn btn-primary" href="@(this.Url.Action("ReviewRecipe", "Recipe"))">Review Recipe</a>
     </p>
-    <p>
-        <a class="btn btn-primary" href="@(this.Url.Action("EditReviewRecipe", "Recipe"))">Edit Review Recipe</a>
-    </p>
+    @foreach (ReviewViewModel reviewViewModel in Model.ReviewViewModel)
+    {
+        <div class="form-group row">
+            @reviewViewModel.Review
+            <p>
+                <a class="btn btn-primary" href="@(this.Url.Action("EditReviewRecipe", "Recipe"))">Edit Review Recipe</a>
+            </p>
+        </div>
+    }
 }
 
