@@ -10,9 +10,8 @@ namespace FoodRecipe.Models
         public string? Id { get; set; }
         
         public string? Username { get; set; }
-
+        public string? Name { get; set; }
         public string? Summary { get; set; } = "Add it here!";
-
-        public string? DateBirth { get; set; } = null;
+        public string? DateOfBirth { get; set; } = null;
     }    
 }

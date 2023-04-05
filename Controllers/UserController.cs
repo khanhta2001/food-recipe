@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 using FoodRecipe.Models;
 using FoodRecipe.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace FoodRecipe.Controllers
 {
@@ -12,10 +15,12 @@ namespace FoodRecipe.Controllers
     {
         private readonly DataService _dataService;
 
+        private readonly Data _data;
 
-        public UserController( DataService dataService)
+        public UserController( DataService dataService, Data data)
         {
             _dataService = dataService;
+            _data = data;
         }
         [AllowAnonymous]
         [HttpGet]
@@ -29,7 +34,7 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]
-        public IActionResult Login(LoginViewModel loginViewModel)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -52,10 +57,47 @@ namespace FoodRecipe.Controllers
             
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
             var passwordVerificationResult = passwordHasher.VerifyHashedPassword(null, existingUser.Password, password);
+            
             if (passwordVerificationResult == PasswordVerificationResult.Success)
             {
                 return this.RedirectToAction("HomePage", "Home");
             }
+            
+                        
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim("UserId", existingUser.Id.ToString()),
+                new Claim(ClaimTypes.Name, existingUser.Username),
+            };
+            
+            if (existingUser.IsOwner)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Owner"));
+            }
+
+            if (existingUser.IsAdmin)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
+
+            if (!existingUser.IsOwner && !existingUser.IsAdmin)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "User"));
+            }
+            
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await this.HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    AllowRefresh = true,
+                }).ConfigureAwait(false);
+            
             return this.View();
         }
         
@@ -70,7 +112,7 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Register")]
-        public IActionResult Register(RegisterViewModel registerViewModel)
+        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -107,7 +149,7 @@ namespace FoodRecipe.Controllers
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
                 var smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", "_data.Password");
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _data.Password);
                 smtpClient.Send(message); 
             }
             catch (Exception ex)
@@ -118,6 +160,27 @@ namespace FoodRecipe.Controllers
             ViewData["VerificationReason"] = "Register";
             var verification = new VerificationViewModel();
             verification.VerificationReason = "Register Your Account";
+            
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim("UserId", user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.IsOwner ? "Owner" : user.IsAdmin ? "Admin" : "User"),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await this.HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    AllowRefresh = true,
+                }).ConfigureAwait(false);
+            
             return View("VerificationOtp");
         }
         
@@ -132,8 +195,11 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("ResetPassword")]
-        public IActionResult ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        public IActionResult ResetPassword(ResetPasswordViewModel resetPasswordViewModel, int userId)
         {
+            var passwordHasher = new PasswordHasher<string>();
+            var password = passwordHasher.HashPassword(null, resetPasswordViewModel.NewPassword);
+            this._dataService.ChangeModel<UserViewModel>(userId,"UserViewModel", "User", "Password", password);
             return this.RedirectToAction("Login", "User");
         }
         
@@ -194,7 +260,7 @@ namespace FoodRecipe.Controllers
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
                 var smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", "_data.Password");
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _data.Password);
                 smtpClient.Send(message); 
             }
             catch (Exception ex)
@@ -203,6 +269,22 @@ namespace FoodRecipe.Controllers
             }
             this._dataService.ChangeModel<UserViewModel>(existingEmail.Id,"UserViewModel", "Verification", "Verification", OTP.ToString());
             return View("VerificationOtp");
+        }
+        
+        [HttpGet]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
+
+            return this.RedirectToAction("HomePage", "Home");
+        }
+        
+        [HttpGet]
+        [Route("access_denied")]
+        public IActionResult AccessDenied()
+        {
+            return this.RedirectToAction("HomePage", "Home");
         }
     }
 }
