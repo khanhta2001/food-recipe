@@ -15,12 +15,12 @@ namespace FoodRecipe.Controllers
     {
         private readonly DataService _dataService;
 
-        private readonly Data _data;
+        private readonly SecretKey _secretKey;
 
-        public UserController( DataService dataService, Data data)
+        public UserController( DataService dataService, SecretKey secretKey)
         {
             _dataService = dataService;
-            _data = data;
+            _secretKey = secretKey;
         }
         [AllowAnonymous]
         [HttpGet]
@@ -149,7 +149,7 @@ namespace FoodRecipe.Controllers
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
                 var smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _data.Password);
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey.Password);
                 smtpClient.Send(message); 
             }
             catch (Exception ex)
@@ -260,7 +260,7 @@ namespace FoodRecipe.Controllers
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
                 var smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _data.Password);
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey.Password);
                 smtpClient.Send(message); 
             }
             catch (Exception ex)
