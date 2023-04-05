@@ -1,14 +1,31 @@
-﻿<div class="container w-75">
-    <form action="{{ url_for('updateProfile') }}" method="post" class="updateProfile" enctype="multipart/form-data">
-        <dl>
-            <dt><label for="titleInput" class="form-label">Name:</label>
-            <dd><input type="text" class="form-control" id="titleInput" name="name" placeholder="Change your name!" required>
-            <dt><label for="textareaInput" class="form-label">Summary:</label>
-            <dd><textarea name="summary" class="form-control" id="textareaInput" rows="5" cols="40" placeholder="Write something about yourself!"></textarea>
-            <dt><label for="file" class="form-label">Change Your profile picture:</label>
-            <dd><input type=file name=file>
-            <dt><button type="submit" class="btn btn-dark mb-3" value=Upload>Update</button>
-            <dt><a href="{{ url_for('user_account') }}" class="btn btn-dark mb-3">Cancel</a>
-        </dl>
-    </form>
+﻿@{
+    Layout = "_Layout";
+}
+
+@using System.Xml.Linq
+@model FoodRecipe.Models.AccountViewModel
+
+<div class="container w-75">
+    @using (Html.BeginForm("Login", "User"))
+    {
+        <div class="form-group row">
+            @Html.LabelFor(x => x.Name)
+            @Html.EditorFor(x => x.Name)
+            @Html.ValidationMessageFor(x => x.Name)
+        </div>
+        <div class="form-group row">
+            @Html.LabelFor(x => x.Summary)
+            @Html.EditorFor(x => x.Summary)
+            @Html.TextBoxFor(x => x.Summary)
+            @Html.ValidationMessageFor(x => x.Summary)
+        </div>
+        <div class="form-group row">
+            @Html.LabelFor(x => x.DateOfBirth)
+            @Html.EditorFor(x => x.DateOfBirth)
+            @Html.ValidationMessageFor(x => x.DateOfBirth)
+        </div>
+        <p>
+            <input id = "Submit" type = "submit" value = "submit" />
+        </p>
+    }
 </div>
