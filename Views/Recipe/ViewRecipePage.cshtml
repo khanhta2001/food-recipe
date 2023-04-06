@@ -20,19 +20,19 @@
         <div class="form-group row">
             @recipeViewModel.DietaryRestriction
         </div>   
+        <p>
+            <a class="btn btn-primary" href="@(this.Url.Action("SaveRecipe", "Recipe", new {recipeId = recipeViewModel.Id}))">Save</a>
+        </p>
+        <p>
+            <a class="btn btn-primary" href="@(this.Url.Action("LikeRecipe", "Recipe", new {recipeId = recipeViewModel.Id}))">Like Recipe</a>
+        </p>
+        <p>
+            <a class="btn btn-primary" href="@(this.Url.Action("LikeRecipe", "Recipe", new {recipeId = recipeViewModel.Id}))">Unlike Recipe</a>
+        </p>
+        <p>
+            <a class="btn btn-primary" href="@(this.Url.Action("ReviewRecipe", "Recipe", new {recipeId = recipeViewModel.Id}))">Review Recipe</a>
+        </p>
     }
-    <p>
-        <a class="btn btn-primary" href="@(this.Url.Action("SaveRecipe", "Recipe"))">Save</a>
-    </p>
-    <p>
-        <a class="btn btn-primary" href="@(this.Url.Action("LikeRecipe", "Recipe"))">Like Recipe</a>
-    </p>
-    <p>
-        <a class="btn btn-primary" href="@(this.Url.Action("LikeRecipe", "Recipe"))">Unlike Recipe</a>
-    </p>
-    <p>
-        <a class="btn btn-primary" href="@(this.Url.Action("ReviewRecipe", "Recipe"))">Review Recipe</a>
-    </p>
     @foreach (ReviewViewModel reviewViewModel in Model.ReviewViewModel)
     {
         <div class="form-group row">

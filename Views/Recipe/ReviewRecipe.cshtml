@@ -9,8 +9,8 @@
         @Html.EditorFor(x => x.Review)
         @Html.ValidationMessageFor(x => x.Review)
     </div>
-    @Html.ValidationSummary()
+    @Html.HiddenFor(x => x.Id)
     <p>
-        <a class="btn btn-primary" href="@(this.Url.Action("ReviewRecipe", "Recipe"))">Review</a>
+        <input id = "Submit" type = "submit" value = "submit" />
     </p>
 }
