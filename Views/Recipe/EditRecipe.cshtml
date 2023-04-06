@@ -28,8 +28,8 @@
         @Html.ValueFor(x => x.DietaryRestriction)
         @Html.ValidationMessageFor(x => x.DietaryRestriction)
     </div>
-    @Html.ValidationSummary()
+    @Html.HiddenFor(x => x.Id)
     <p>
-        <a class="btn btn-primary" href="@(this.Url.Action("EditRecipe", "Recipe"))">Edit Recipe</a>
+        <input id = "Submit" type = "submit" value = "submit" />
     </p>
 }
