@@ -152,8 +152,26 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("LikeRecipe")]
-        public IActionResult LikeRecipe()
+        public IActionResult LikeRecipe(string action)
         {
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return View("ViewRecipePage");
+            }
+
+            var recipeId = new List<string>();
+            var userLikeRecipeModel = new UserLikeRecipeModel()
+            {
+                RecipeId = recipeId
+            };
+            if (action == "Like")
+            {
+                this._dataService.AddModel<UserLikeRecipeModel>(userLikeRecipeModel, "UserLikeRecipeModel");
+            }
+            else
+            {
+                // Remove the model, by adding in the dataService the method function
+            }
             return View("ViewRecipePage");
         }
         
