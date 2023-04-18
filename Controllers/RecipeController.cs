@@ -139,6 +139,13 @@ namespace FoodRecipe.Controllers
         [Route("SaveRecipe")]
         public IActionResult SaveRecipe(int recipeId)
         {
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return this.View();
+            }
+
+            var userId = this.User.Identity.Name;
+            
             return View("ViewRecipePage");
         }
         
