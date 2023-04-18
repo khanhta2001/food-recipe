@@ -93,6 +93,14 @@ namespace FoodRecipe.Controllers
         [Route("EditReviewRecipe")]
         public IActionResult EditReviewRecipe(ReviewViewModel reviewViewModel)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var review = reviewViewModel.Review;
+
+            this._dataService.ChangeModel<RecipeViewModel>(reviewViewModel.Id,"RecipeViewModel", "Id", "Review", review);
             return View("ViewRecipePage");
         }
         
@@ -109,6 +117,20 @@ namespace FoodRecipe.Controllers
         [Route("ReviewRecipe")]
         public IActionResult ReviewRecipe(ReviewViewModel reviewViewModel)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var review = reviewViewModel.Review;
+            
+
+            var recipe = new ReviewViewModel()
+            {
+                Review = review
+            };
+            
+            this._dataService.AddModel<ReviewViewModel>(recipe, "ReviewViewModel");
             return View("ReviewRecipe");
         }
         

@@ -24,7 +24,6 @@
         @Html.PasswordFor(x => x.DietaryRestriction)
         @Html.ValidationMessageFor(x => x.DietaryRestriction)
     </div>
-    @Html.ValidationSummary()
     <p>
         <a class="btn btn-primary" href="@(this.Url.Action("CreateRecipe", "Recipe"))">Create Recipe</a>
     </p>
