@@ -1,10 +1,19 @@
-using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
+using FoodRecipe.Models;
+using Microsoft.AspNetCore.Authorization;
+using FoodRecipe.Services;
 
 namespace FoodRecipe.Controllers
 {
     public class CategoriesController : Controller
     {
+        private readonly DataService _dataService;
+        public CategoriesController(DataService dataService)
+        {
+            _dataService = dataService;
+        }
         [AllowAnonymous]
         [HttpGet]
         [Route("Categories")]
@@ -18,7 +27,8 @@ namespace FoodRecipe.Controllers
         [Route("Categories_recipes")]
         public IActionResult Categories_recipes(string categoriesType)
         {
-            return View("Categories_recipes");
+            var recipeCategories = this._dataService.FindAllRecipes(categoriesType, "RecipeViewModel");
+            return View("Categories_recipes", recipeCategories);
         }
     }
 }
