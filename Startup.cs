@@ -26,6 +26,8 @@ namespace FoodRecipe
                 var databaseName = config.GetSection("MongoDB:DatabaseName").Value;
                 return mongoClient.GetDatabase(databaseName);
             });
+            
+            services.AddScoped<SecretKey>();
             services.AddScoped<DataService>();
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
