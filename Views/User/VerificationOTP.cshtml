@@ -6,7 +6,7 @@
     </div>
     <div class="auth-form px-3" id="verification">
         <div class="auth-form-body mt-3">
-            @using (Html.BeginForm())
+            @using (Html.BeginForm("VerificationOtp", "User"))
             {
                 <div class="form-group row">
                     @Html.LabelFor(x => x.OTP)

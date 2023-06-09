@@ -112,7 +112,7 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        public IActionResult Register(RegisterViewModel registerViewModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -151,7 +151,7 @@ namespace FoodRecipe.Controllers
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587 ) 
                 {
                     Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey.Password),
-                    EnableSsl = true // set to true if your server requires SSL/TLS
+                    EnableSsl = true
                 };
                 smtpClient.Send(message); 
             }
@@ -159,12 +159,10 @@ namespace FoodRecipe.Controllers
             {
                 return this.RedirectToAction("Register", "User");
             }
+            
             this._dataService.AddModel<UserViewModel>(user, "UserViewModel");
-            ViewData["VerificationReason"] = "Register";
-            var verification = new VerificationViewModel();
-            verification.VerificationReason = "Register Your Account";
-
-            return View("VerificationOtp");
+            
+            return this.RedirectToAction("Verification", "User");
         }
         
         [AllowAnonymous]
@@ -182,8 +180,16 @@ namespace FoodRecipe.Controllers
         {
             var passwordHasher = new PasswordHasher<string>();
             var password = passwordHasher.HashPassword(null, resetPasswordViewModel.NewPassword);
-            this._dataService.ChangeModel<UserViewModel>(userId,"UserViewModel", "User", "Password", password);
+            this._dataService.ChangeModel<UserViewModel>("userId","UserViewModel", "User", "Password", password);
             return this.RedirectToAction("Login", "User");
+        }
+        
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("Verification")]
+        public IActionResult Verification()
+        {
+            return View("VerificationOtp");
         }
         
         [AllowAnonymous]
@@ -192,12 +198,16 @@ namespace FoodRecipe.Controllers
         public IActionResult VerificationOtp(VerificationViewModel verificationViewModel)
         {
             var userOTP = verificationViewModel.OTP;
-            var correct = this._dataService.FindVariable<UserViewModel>(userOTP,"UserViewModel", "User");
+            if (userOTP == null)
+            {
+                return this.RedirectToAction("Verification", "User");
+            }
+            var correct = this._dataService.FindVariable<UserViewModel>(userOTP,"UserViewModel", "Verification");
             if (correct == null)
             {
                 return View("VerificationOtp");
             }
-            this._dataService.ChangeModel<UserViewModel>(correct.UserId,"UserViewModel", "Verification", "Verification", "Verified");
+            this._dataService.ChangeModel<UserViewModel>(userOTP,"UserViewModel", "Verification", "Verification", "Verified");
             
             if (verificationViewModel.VerificationReason is "Register" or "Verify Email")
             {
@@ -250,7 +260,7 @@ namespace FoodRecipe.Controllers
             {
                 return this.RedirectToAction("Register", "User");
             }
-            this._dataService.ChangeModel<UserViewModel>(existingEmail.UserId,"UserViewModel", "Verification", "Verification", OTP.ToString());
+            this._dataService.ChangeModel<UserViewModel>("existingEmail.UserId","UserViewModel", "Verification", "Verification", OTP.ToString());
             return View("VerificationOtp");
         }
         

@@ -73,10 +73,10 @@ namespace FoodRecipe.Controllers
             var category = recipeViewModel.Category;
             var dietaryRestriction = recipeViewModel.DietaryRestriction;
 
-            this._dataService.ChangeModel<RecipeViewModel>(recipeViewModel.RecipeId,"RecipeViewModel", "Id", "Title", title);
-            this._dataService.ChangeModel<RecipeViewModel>(recipeViewModel.RecipeId,"RecipeViewModel", "Id", "content", content);
-            this._dataService.ChangeModel<RecipeViewModel>(recipeViewModel.RecipeId,"RecipeViewModel", "Id", "category", category);
-            this._dataService.ChangeModel<RecipeViewModel>(recipeViewModel.RecipeId,"RecipeViewModel", "Id", "dietaryRestriction", dietaryRestriction);
+            this._dataService.ChangeModel<RecipeViewModel>("recipeViewModel.RecipeId","RecipeViewModel", "Id", "Title", title);
+            this._dataService.ChangeModel<RecipeViewModel>("recipeViewModel.RecipeId","RecipeViewModel", "Id", "content", content);
+            this._dataService.ChangeModel<RecipeViewModel>("recipeViewModel.RecipeId","RecipeViewModel", "Id", "category", category);
+            this._dataService.ChangeModel<RecipeViewModel>("recipeViewModel.RecipeId","RecipeViewModel", "Id", "dietaryRestriction", dietaryRestriction);
             return View("EditRecipe");
         }
 
@@ -100,7 +100,7 @@ namespace FoodRecipe.Controllers
 
             var review = reviewViewModel.Review;
 
-            this._dataService.ChangeModel<RecipeViewModel>(reviewViewModel.ReviewId,"RecipeViewModel", "Id", "Review", review);
+            this._dataService.ChangeModel<RecipeViewModel>("reviewViewModel.ReviewId","RecipeViewModel", "Id", "Review", review);
             return View("ViewRecipePage");
         }
         

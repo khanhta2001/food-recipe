@@ -28,9 +28,9 @@ namespace FoodRecipe.Controllers
             var name = accountViewModel.Name;
             var dateOfBirth = accountViewModel.DateOfBirth;
             var summary = accountViewModel.Summary;
-            this._dataService.ChangeModel<AccountViewModel>(userId,"AccountViewModel", "Id", "Name", name);
-            this._dataService.ChangeModel<AccountViewModel>(userId,"AccountViewModel", "Id", "DateOfBirth", dateOfBirth);
-            this._dataService.ChangeModel<AccountViewModel>(userId,"AccountViewModel", "Id", "Summary", summary);
+            this._dataService.ChangeModel<AccountViewModel>("userId","AccountViewModel", "Id", "Name", name);
+            this._dataService.ChangeModel<AccountViewModel>("userId","AccountViewModel", "Id", "DateOfBirth", dateOfBirth);
+            this._dataService.ChangeModel<AccountViewModel>("userId","AccountViewModel", "Id", "Summary", summary);
             return View("UserAccount");
         }
         
