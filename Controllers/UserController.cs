@@ -66,7 +66,7 @@ namespace FoodRecipe.Controllers
                         
             List<Claim> claims = new List<Claim>
             {
-                new Claim("UserId", existingUser.Id.ToString()),
+                new Claim("UserId", existingUser.UserId.ToString()),
                 new Claim(ClaimTypes.Name, existingUser.Username),
             };
             
@@ -123,7 +123,7 @@ namespace FoodRecipe.Controllers
             var currentEmail = registerViewModel.Email;
             var existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "User");
             var existingEmail = this._dataService.FindVariable<UserViewModel>(currentEmail,"UserViewModel", "Email");
-            if (existingUser == null || existingEmail == null)
+            if (existingUser != null || existingEmail != null)
             {
                 return this.RedirectToAction("Register", "User");
             }
@@ -148,8 +148,11 @@ namespace FoodRecipe.Controllers
                 message.Subject = "Email registration for Food Recipe Account";
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
-                var smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey.Password);
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587 ) 
+                {
+                    Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey.Password),
+                    EnableSsl = true // set to true if your server requires SSL/TLS
+                };
                 smtpClient.Send(message); 
             }
             catch (Exception ex)
@@ -160,27 +163,7 @@ namespace FoodRecipe.Controllers
             ViewData["VerificationReason"] = "Register";
             var verification = new VerificationViewModel();
             verification.VerificationReason = "Register Your Account";
-            
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim("UserId", user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.IsOwner ? "Owner" : user.IsAdmin ? "Admin" : "User"),
-            };
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
-
-            await this.HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties
-                {
-                    IsPersistent = true,
-                    AllowRefresh = true,
-                }).ConfigureAwait(false);
-            
             return View("VerificationOtp");
         }
         
@@ -214,7 +197,7 @@ namespace FoodRecipe.Controllers
             {
                 return View("VerificationOtp");
             }
-            this._dataService.ChangeModel<UserViewModel>(correct.Id,"UserViewModel", "Verification", "Verification", "Verified");
+            this._dataService.ChangeModel<UserViewModel>(correct.UserId,"UserViewModel", "Verification", "Verification", "Verified");
             
             if (verificationViewModel.VerificationReason is "Register" or "Verify Email")
             {
@@ -267,7 +250,7 @@ namespace FoodRecipe.Controllers
             {
                 return this.RedirectToAction("Register", "User");
             }
-            this._dataService.ChangeModel<UserViewModel>(existingEmail.Id,"UserViewModel", "Verification", "Verification", OTP.ToString());
+            this._dataService.ChangeModel<UserViewModel>(existingEmail.UserId,"UserViewModel", "Verification", "Verification", OTP.ToString());
             return View("VerificationOtp");
         }
         

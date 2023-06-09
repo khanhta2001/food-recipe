@@ -9,7 +9,7 @@ namespace FoodRecipe.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
+        public string? Id { get; set; }
         
         public string? UserId { get; set; }
         

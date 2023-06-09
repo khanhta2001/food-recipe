@@ -24,7 +24,7 @@
                             <div class="card-footer">
                                 @using (Html.BeginForm("ViewRecipePage", "Recipe"))
                                 {
-                                    <input type="hidden" name="recipe_id" value=@result.Id>
+                                    <input type="hidden" name="recipe_id" value=@result.RecipeId>
                                     <button type="submit" style="margin-left:100px" class="btn btn-sm">Details</button>
                                 }
                             </div>
