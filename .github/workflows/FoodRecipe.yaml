@@ -12,7 +12,7 @@ jobs:
     
     # The type of runner that the job will run on
     # Using github's runners until we can get docker running on our stuff
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
         dotnet-version: ['6.0.x']
