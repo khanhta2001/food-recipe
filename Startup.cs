@@ -1,5 +1,9 @@
-﻿using FoodRecipe.Services;
+﻿using FoodRecipe.Models;
+using FoodRecipe.Services;
+using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
+using AspNetCore.Identity.Mongo;
+
 
 namespace FoodRecipe
 {
@@ -26,9 +30,22 @@ namespace FoodRecipe
                 var databaseName = config.GetSection("MongoDB:DatabaseName").Value;
                 return mongoClient.GetDatabase(databaseName);
             });
-            
-            services.AddScoped<SecretKey>();
             services.AddScoped<DataService>();
+            services.AddIdentityMongoDbProvider<UserViewModel>(
+                identityOptions =>
+                {
+                    identityOptions.Password.RequireDigit = true;
+                    identityOptions.Password.RequiredLength = 8;
+                    identityOptions.Password.RequireNonAlphanumeric = true;
+                    identityOptions.Password.RequireUppercase = true;
+                    identityOptions.Password.RequireLowercase = true;
+                    identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                    identityOptions.Lockout.MaxFailedAccessAttempts = 10;
+                },
+                mongoIdentityOptions =>
+                {
+                    mongoIdentityOptions.ConnectionString = Configuration.GetSection("MongoDB:ConnectionUrl").Value;
+                });
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
@@ -54,7 +71,8 @@ namespace FoodRecipe
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
+                app.UseAuthorization();
 
             app.UseSession();
 
