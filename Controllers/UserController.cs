@@ -16,11 +16,14 @@ namespace FoodRecipe.Controllers
         private readonly DataService _dataService;
 
         private readonly SecretKey _secretKey;
+        
+        private readonly SignInManager<UserViewModel> _signInManager;
 
-        public UserController( DataService dataService, SecretKey secretKey)
+        public UserController( DataService dataService, SecretKey secretKey, SignInManager<UserViewModel> signInManager)
         {
             _dataService = dataService;
             _secretKey = secretKey;
+            _signInManager = signInManager;
         }
         [AllowAnonymous]
         [HttpGet]
@@ -44,60 +47,29 @@ namespace FoodRecipe.Controllers
             var user = loginViewModel.Username;
             var password = loginViewModel.Password;
             
-            var existingUser = this._dataService.FindVariable<UserViewModel>(user, "UserViewModel", "User");
+            var existingUser = this._dataService.FindVariable<UserViewModel>(user, "UserViewModel", "UserName");
             if (existingUser == null)
             {
                 return this.View();
             }
-
-            if (existingUser.Verification != "Verified")
+            
+            var thisUser = this._dataService.FindVariable<VerificationViewModel>(existingUser.Id.ToString(),"VerificationViewModel", "UserId");
+            
+            if (thisUser.Verification != "Verified")
             {
                 return this.View();
             }
+            
             
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
             var passwordVerificationResult = passwordHasher.VerifyHashedPassword(null, existingUser.Password, password);
             
             if (passwordVerificationResult == PasswordVerificationResult.Success)
             {
+                await _signInManager.SignInAsync(existingUser, isPersistent: false);
                 return this.RedirectToAction("HomePage", "Home");
             }
-            
-                        
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim("UserId", existingUser.UserId.ToString()),
-                new Claim(ClaimTypes.Name, existingUser.Username),
-            };
-            
-            if (existingUser.IsOwner)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "Owner"));
-            }
 
-            if (existingUser.IsAdmin)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-            }
-
-            if (!existingUser.IsOwner && !existingUser.IsAdmin)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "User"));
-            }
-            
-            var claimsIdentity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
-
-            await this.HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties
-                {
-                    IsPersistent = true,
-                    AllowRefresh = true,
-                }).ConfigureAwait(false);
-            
             return this.View();
         }
         
@@ -121,7 +93,7 @@ namespace FoodRecipe.Controllers
 
             var currentUser = registerViewModel.Username;
             var currentEmail = registerViewModel.Email;
-            var existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "User");
+            var existingUser = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "UserName");
             var existingEmail = this._dataService.FindVariable<UserViewModel>(currentEmail,"UserViewModel", "Email");
             if (existingUser != null || existingEmail != null)
             {
@@ -135,11 +107,14 @@ namespace FoodRecipe.Controllers
             
             var user = new UserViewModel()
             {
-                Username = registerViewModel.Username,
+                UserName = registerViewModel.Username,
+                NormalizedUserName = registerViewModel.Username,
                 Email = registerViewModel.Email,
+                NormalizedEmail = registerViewModel.Email,
                 Password = passwordHasher.HashPassword(null, registerViewModel.Password),
-                Verification = OTP.ToString()
+                SecurityStamp = Guid.NewGuid().ToString()
             };
+            
             try
             {
                 var message = new MailMessage();
@@ -161,6 +136,17 @@ namespace FoodRecipe.Controllers
             }
             
             this._dataService.AddModel<UserViewModel>(user, "UserViewModel");
+            
+            var currentUserModel = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "UserName");
+            
+            var verification = new VerificationViewModel()
+            {
+                UserId = currentUserModel.Id.ToString(),
+                Verification = "Register",
+                OTP = OTP.ToString()
+            };
+            
+            this._dataService.AddModel<VerificationViewModel>(verification, "VerificationViewModel");
             
             return this.RedirectToAction("Verification", "User");
         }
@@ -202,25 +188,26 @@ namespace FoodRecipe.Controllers
             {
                 return this.RedirectToAction("Verification", "User");
             }
-            var correct = this._dataService.FindVariable<UserViewModel>(userOTP,"UserViewModel", "Verification");
+            
+            var correct = this._dataService.FindVariable<VerificationViewModel>(userOTP,"VerificationViewModel", "OTP");
+            
             if (correct == null)
             {
                 return View("VerificationOtp");
             }
-            this._dataService.ChangeModel<UserViewModel>(userOTP,"UserViewModel", "Verification", "Verification", "Verified");
-            
-            if (verificationViewModel.VerificationReason is "Register" or "Verify Email")
+
+            if (correct.Verification is "Register" or "Verify Email")
             {
+                this._dataService.ChangeModel<VerificationViewModel>(userOTP,"VerificationViewModel", "OTP", "Verification", "Verified");
+                
                 return View("Login");
             }
-            else if (verificationViewModel.VerificationReason == "Forget Password")
+            if (correct.Verification == "Forget Password")
             {
                 return this.RedirectToAction("ResetPassword", "User");
             }
-            else
-            {
-                return View("VerificationOtp");
-            }
+            
+            return View("VerificationOtp");
         }
         
         [AllowAnonymous]
