@@ -255,7 +255,7 @@ namespace FoodRecipe.Controllers
         [Route("logout")]
         public async Task<IActionResult> Logout()
         {
-            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
+            await _signInManager.SignOutAsync().ConfigureAwait(false);
 
             return this.RedirectToAction("HomePage", "Home");
         }

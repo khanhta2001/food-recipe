@@ -11,7 +11,7 @@
         <a class="nav-link text-dark" href="@this.Url.Action("Login", "User")">@this.User.Identity.Name</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark" @this.Url.Action("Logout", "User")>Logout</a>
+        <a class="nav-link text-dark" href="@this.Url.Action("Logout", "User")">Logout</a>
     </li>
 }
 else
