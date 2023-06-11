@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AspNetCore.Identity.Mongo.Model;
-using Microsoft.AspNetCore.Identity;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using AspNetCore.Identity.Mongo.Model;
 
 
 namespace FoodRecipe.Models
