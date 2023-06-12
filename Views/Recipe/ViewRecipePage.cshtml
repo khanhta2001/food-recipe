@@ -1,46 +1,43 @@
+@model RecipeReviewViewModel
 @{
     Layout = "_Layout";
 }
 <p>
     <a class="btn btn-primary" href="@(this.Url.Action("EditRecipe", "Recipe"))">Save</a>
 </p>
-@using (Html.BeginForm())
-{
-    @foreach (RecipeViewModel recipeViewModel in Model.RecipeViewModel)
-    {
-        <div class="form-group row">
-            @recipeViewModel.Title
-        </div>
-        <div class="form-group row">
-            @recipeViewModel.Category
-        </div>
-        <div class="form-group row">
-            @recipeViewModel.Content
-        </div>
-        <div class="form-group row">
-            @recipeViewModel.DietaryRestriction
-        </div>   
-        <p>
-            <a class="btn btn-primary" href="@(this.Url.Action("SaveRecipe", "Recipe", new {recipeId = recipeViewModel.RecipeId}))">Save</a>
-        </p>
-        <p>
-            <a class="btn btn-primary" href="@(this.Url.Action("LikeRecipe", "Recipe", new {recipeId = recipeViewModel.RecipeId}))">Like Recipe</a>
-        </p>
-        <p>
-            <a class="btn btn-primary" href="@(this.Url.Action("LikeRecipe", "Recipe", new {recipeId = recipeViewModel.RecipeId}))">Unlike Recipe</a>
-        </p>
-        <p>
-            <a class="btn btn-primary" href="@(this.Url.Action("ReviewRecipe", "Recipe", new {recipeId = recipeViewModel.RecipeId}))">Review Recipe</a>
-        </p>
-    }
-    @foreach (ReviewViewModel reviewViewModel in Model.ReviewViewModel)
-    {
-        <div class="form-group row">
-            @reviewViewModel.Review
-            <p>
-                <a class="btn btn-primary" href="@(this.Url.Action("EditReviewRecipe", "Recipe"))">Edit Review Recipe</a>
-            </p>
-        </div>
-    }
-}
+
+<div class="form-group row">
+    @Model.RecipeViewModel.Title
+</div>
+<div class="form-group row">
+    @Model.RecipeViewModel.Category
+</div>
+<div class="form-group row">
+    @Model.RecipeViewModel.Content
+</div>
+<div class="form-group row">
+    @Model.RecipeViewModel.DietaryRestriction
+</div>   
+<p>
+    <a class="btn btn-primary" href="@(this.Url.Action("SaveRecipe", "Recipe", new {recipeId = Model.RecipeViewModel.RecipeId}))">Save</a>
+</p>
+<p>
+    <a class="btn btn-primary" href="@(this.Url.Action("LikeRecipe", "Recipe", new {recipeId = Model.RecipeViewModel.RecipeId}))">Like Recipe</a>
+</p>
+<p>
+    <a class="btn btn-primary" href="@(this.Url.Action("LikeRecipe", "Recipe", new {recipeId = Model.RecipeViewModel.RecipeId}))">Unlike Recipe</a>
+</p>
+<p>
+    <a class="btn btn-primary" href="@(this.Url.Action("ReviewRecipe", "Recipe", new {recipeId = Model.RecipeViewModel.RecipeId}))">Review Recipe</a>
+</p>
+@* @foreach (ReviewViewModel reviewViewModel in Model.ReviewViewModel) *@
+@* { *@
+@*     <div class="form-group row"> *@
+@*         @reviewViewModel.Review *@
+@*         <p> *@
+@*             <a class="btn btn-primary" href="@(this.Url.Action("EditReviewRecipe", "Recipe"))">Edit Review Recipe</a> *@
+@*         </p> *@
+@*     </div> *@
+@* } *@
+
 

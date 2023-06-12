@@ -2,7 +2,7 @@
 @{
     Layout = "_Layout";
 }
-@using (Html.BeginForm())
+@using (Html.BeginForm("CreateRecipe", "Recipe"))
 {
     <div class="form-group row">
         @Html.LabelFor(x => x.Title)
@@ -21,10 +21,10 @@
     </div>
     <div class="form-group row">
         @Html.LabelFor(x => x.DietaryRestriction)
-        @Html.PasswordFor(x => x.DietaryRestriction)
+        @Html.EditorFor(x => x.DietaryRestriction)
         @Html.ValidationMessageFor(x => x.DietaryRestriction)
     </div>
     <p>
-        <a class="btn btn-primary" href="@(this.Url.Action("CreateRecipe", "Recipe"))">Create Recipe</a>
+        <input id = "Submit" type = "submit" value = "Create Recipe" class="btn btn-primary"/>
     </p>
 }

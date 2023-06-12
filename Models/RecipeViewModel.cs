@@ -8,9 +8,6 @@ namespace FoodRecipe.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        
-        public string? Id { get; set; }
-        
         public int RecipeId { get; set; }
         
         [Required]
