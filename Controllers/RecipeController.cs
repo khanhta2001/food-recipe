@@ -18,7 +18,7 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("CreateRecipe")]
-        public IActionResult CreateRecipe()
+        public IActionResult CreateRecipePage()
         {
             return View("CreateRecipe");
         }
@@ -26,7 +26,7 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("CreateRecipe")]
-        public IActionResult CreateRecipe(RecipeViewModel recipeViewModel)
+        public async Task<IActionResult> CreateRecipe(RecipeViewModel recipeViewModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -38,16 +38,27 @@ namespace FoodRecipe.Controllers
             var category = recipeViewModel.Category;
             var dietaryRestriction = recipeViewModel.DietaryRestriction;
 
-            var recipe = new RecipeViewModel()
+            var recipeModel = new RecipeViewModel()
             {
                 Title = title,
                 Content = content,
                 Category = category,
                 DietaryRestriction = dietaryRestriction
             };
+
+            var reviewModel = new ReviewViewModel()
+            {
+
+            };
             
-            this._dataService.AddModel<RecipeViewModel>(recipe, "RecipeViewModel");
-            return View("ViewRecipePage");
+            this._dataService.AddModel<RecipeViewModel>(recipeModel, "RecipeViewModel");
+
+            var recipeReviewViewModel = new RecipeReviewViewModel()
+            {
+                ReviewViewModel = reviewModel,
+                RecipeViewModel = recipeModel
+            };
+            return View("ViewRecipePage", recipeReviewViewModel);
         }
         
         [AllowAnonymous]
