@@ -8,7 +8,7 @@ namespace FoodRecipe.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int RecipeId { get; set; }
+        public string? RecipeId { get; set; }
         
         [Required]
         public string? Title { get; set; }
@@ -20,5 +20,5 @@ namespace FoodRecipe.Models
         public string? Content { get; set; }
         
         public string? DietaryRestriction { get; set; }
-    }   
+    }
 }
