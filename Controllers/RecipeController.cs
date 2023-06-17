@@ -46,16 +46,11 @@ namespace FoodRecipe.Controllers
                 DietaryRestriction = dietaryRestriction
             };
 
-            var reviewModel = new ReviewViewModel()
-            {
-
-            };
-            
             this._dataService.AddModel<RecipeViewModel>(recipeModel, "RecipeViewModel");
 
             var recipeReviewViewModel = new RecipeReviewViewModel()
             {
-                ReviewViewModel = reviewModel,
+                ReviewViewModel = new ReviewViewModel(),
                 RecipeViewModel = recipeModel
             };
             return View("ViewRecipePage", recipeReviewViewModel);
