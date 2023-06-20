@@ -14,8 +14,8 @@ namespace FoodRecipe.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        [Route("UpdateProfile")]
-        public IActionResult UpdateProfile()
+        [Route("UpdateProfilePage")]
+        public IActionResult UpdateProfilePage()
         {
             return View("UpdateProfile");
         }
@@ -41,5 +41,14 @@ namespace FoodRecipe.Controllers
         {
             return View();
         }
+        
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("FollowAccount")]
+        public IActionResult FollowAccount()
+        {
+            return RedirectToAction("UserAccount");
+        }
+        
     }
 }
