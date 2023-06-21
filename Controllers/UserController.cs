@@ -240,7 +240,7 @@ namespace FoodRecipe.Controllers
                 message.Subject = "Email registration for Food Recipe Account";
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
-                var smtpClient = new SmtpClient("smtp.gmail.com", 465);
+                var smtpClient = new SmtpClient("smtp.gmail.com", 587);
                 smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey);
                 smtpClient.Send(message); 
             }
