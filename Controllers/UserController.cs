@@ -8,6 +8,7 @@ using FoodRecipe.Models;
 using FoodRecipe.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
 
 namespace FoodRecipe.Controllers
 {
@@ -15,14 +16,14 @@ namespace FoodRecipe.Controllers
     {
         private readonly DataService _dataService;
 
-        private readonly SecretKey _secretKey;
+        private readonly string _secretKey;
         
         private readonly SignInManager<UserViewModel> _signInManager;
 
-        public UserController( DataService dataService, SecretKey secretKey, SignInManager<UserViewModel> signInManager)
+        public UserController( DataService dataService, IOptions<SecretKey> secretKey, SignInManager<UserViewModel> signInManager)
         {
             _dataService = dataService;
-            _secretKey = secretKey;
+            _secretKey = secretKey.Value.Password;
             _signInManager = signInManager;
         }
         [AllowAnonymous]
@@ -125,7 +126,7 @@ namespace FoodRecipe.Controllers
 
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587 ) 
                 {
-                    Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey.Password),
+                    Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey),
                     EnableSsl = true
                 };
                 smtpClient.Send(message); 
@@ -240,7 +241,7 @@ namespace FoodRecipe.Controllers
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
                 var smtpClient = new SmtpClient("smtp.gmail.com", 465);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey.Password);
+                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey);
                 smtpClient.Send(message); 
             }
             catch (Exception ex)
