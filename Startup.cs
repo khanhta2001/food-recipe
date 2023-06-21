@@ -31,7 +31,7 @@ namespace FoodRecipe
                 return mongoClient.GetDatabase(databaseName);
             });
             services.AddScoped<DataService>();
-            services.AddScoped<SecretKey>();
+            services.Configure<SecretKey>(Configuration.GetSection("SecretKey"));
             services.AddIdentityMongoDbProvider<UserViewModel>(
                 identityOptions =>
                 {

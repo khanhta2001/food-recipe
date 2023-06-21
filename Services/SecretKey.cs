@@ -2,6 +2,6 @@
 {
     public class SecretKey
     {
-        public string Password = "You cannot see";
+        public string Password { get; set; }
     }
 }
