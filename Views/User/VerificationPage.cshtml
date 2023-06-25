@@ -5,13 +5,12 @@
     </div>
     <div class="auth-form px-3" id="verification">
         <div class="auth-form-body mt-3">
-            @using (Html.BeginForm())
+            @using (Html.BeginForm("VerifyEmail", "User", FormMethod.Post))
             {
-                
                 <label for="email" class="form-label">Email</label>
                 <input type="text" class="form-control" name="emailValue" id="email">
                 <p>
-                    <input id = "Submit" type = "submit" value = "submit" class="btn btn-primary" />
+                    <input id="Submit" type="submit" value="submit" class="btn btn-primary" />
                 </p>
             }
         </div>

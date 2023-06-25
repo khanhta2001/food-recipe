@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using FoodRecipe.Models;
 using FoodRecipe.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -115,6 +116,12 @@ namespace FoodRecipe.Controllers
                 Password = passwordHasher.HashPassword(null, registerViewModel.Password),
                 SecurityStamp = Guid.NewGuid().ToString()
             };
+
+            var accountUser = new AccountViewModel()
+            {
+                Username = registerViewModel.Username,
+                Name = registerViewModel.Username
+            };
             
             try
             {
@@ -137,6 +144,7 @@ namespace FoodRecipe.Controllers
             }
             
             this._dataService.AddModel<UserViewModel>(user, "UserViewModel");
+            this._dataService.AddModel<AccountViewModel>(accountUser, "AccountViewModel");
             
             var currentUserModel = this._dataService.FindVariable<UserViewModel>(currentUser,"UserViewModel", "UserName");
             
@@ -224,6 +232,12 @@ namespace FoodRecipe.Controllers
         [Route("VerificationPage")]
         public IActionResult VerifyEmail(string emailValue)
         {
+            
+            if (!Regex.IsMatch(emailValue, @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$"))
+            {
+                return RedirectToAction("VerificationPage");
+            }
+
             var existingEmail = this._dataService.FindVariable<UserViewModel>(emailValue,"UserViewModel", "Email");
             if (existingEmail == null)
             {
@@ -240,15 +254,20 @@ namespace FoodRecipe.Controllers
                 message.Subject = "Email registration for Food Recipe Account";
                 message.Body = "Hi,\n\nHere is your verification code:\n" + "\n\n" + OTP.ToString() + "\n\nThank you,\nFood Recipe Admin team";
 
-                var smtpClient = new SmtpClient("smtp.gmail.com", 587);
-                smtpClient.Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey);
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587 ) 
+                {
+                    Credentials = new NetworkCredential("testdevappfood@gmail.com", _secretKey),
+                    EnableSsl = true
+                };
+                
                 smtpClient.Send(message); 
             }
             catch (Exception ex)
             {
                 return this.RedirectToAction("Register", "User");
             }
-            this._dataService.ChangeModel<UserViewModel>("existingEmail.UserId","UserViewModel", "Verification", "Verification", OTP.ToString());
+            this._dataService.ChangeModel<UserViewModel>(existingEmail.Id.ToString(),"VerificationViewModel", "Id", "OTP", OTP.ToString());
+            this._dataService.ChangeModel<UserViewModel>(existingEmail.Id.ToString(),"VerificationViewModel", "Id", "Verification", "Forget Password");
             return View("VerificationOtp");
         }
         
