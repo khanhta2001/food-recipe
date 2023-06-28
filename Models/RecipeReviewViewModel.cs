@@ -6,6 +6,6 @@ namespace FoodRecipe.Models
     {
         public RecipeViewModel? RecipeViewModel { get; set; }
         
-        public ReviewViewModel? ReviewViewModel { get; set; }
+        public ReviewViewModel[]? ReviewViewModel { get; set; }
     }   
 }

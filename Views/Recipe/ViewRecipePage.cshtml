@@ -30,14 +30,15 @@
 <p>
     <a class="btn btn-primary" href="@(this.Url.Action("ReviewRecipe", "Recipe", new {recipeId = Model.RecipeViewModel.RecipeId}))">Review Recipe</a>
 </p>
-@* @foreach (ReviewViewModel reviewViewModel in Model.ReviewViewModel) *@
-@* { *@
-@*     <div class="form-group row"> *@
-@*         @reviewViewModel.Review *@
-@*         <p> *@
-@*             <a class="btn btn-primary" href="@(this.Url.Action("EditReviewRecipe", "Recipe"))">Edit Review Recipe</a> *@
-@*         </p> *@
-@*     </div> *@
-@* } *@
+
+@foreach (ReviewViewModel reviewViewModel in Model.ReviewViewModel)
+{
+    <div class="form-group row">
+        @reviewViewModel.Review
+        <p>
+            <a class="btn btn-primary" href="@(this.Url.Action("EditReviewRecipe", "Recipe"))">Edit Review Recipe</a>
+        </p>
+    </div>
+}
 
 

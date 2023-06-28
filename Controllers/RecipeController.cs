@@ -50,7 +50,7 @@ namespace FoodRecipe.Controllers
 
             var recipeReviewViewModel = new RecipeReviewViewModel()
             {
-                ReviewViewModel = new ReviewViewModel(),
+                ReviewViewModel = Array.Empty<ReviewViewModel>(),
                 RecipeViewModel = recipeModel
             };
             return View("ViewRecipePage", recipeReviewViewModel);
