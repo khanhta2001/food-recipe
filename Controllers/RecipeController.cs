@@ -113,9 +113,18 @@ namespace FoodRecipe.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("ReviewRecipe")]
-        public IActionResult ReviewRecipe()
+        public IActionResult ReviewRecipe(string recipeId)
         {
-            return View("ReviewRecipe");
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return this.View();
+            }
+            
+            var review = new ReviewViewModel
+            {
+                RecipeId = recipeId
+            };
+            return View("ReviewRecipe", review);
         }
         
         [AllowAnonymous]
@@ -128,15 +137,7 @@ namespace FoodRecipe.Controllers
                 return this.View();
             }
 
-            var review = reviewViewModel.Review;
-            
-
-            var recipe = new ReviewViewModel()
-            {
-                Review = review
-            };
-            
-            this._dataService.AddModel<ReviewViewModel>(recipe, "ReviewViewModel");
+            this._dataService.AddModel<ReviewViewModel>(reviewViewModel, "ReviewViewModel");
             return View("ReviewRecipe");
         }
         
